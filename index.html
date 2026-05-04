@@ -132,6 +132,7 @@
       display: grid; grid-template-columns: 1fr 1fr; gap: 8px;
       margin: 2.5rem 0; border-radius: 16px; overflow: hidden; height: 220px;
     }
+    .section-photo-row.three { grid-template-columns: 1fr 1fr 1fr; }
     .section-photo-row img {
       width: 100%; height: 100%; object-fit: cover;
       filter: brightness(0.75) saturate(1.1);
@@ -591,8 +592,16 @@
     <span class="img-band-label">Ha Long Bay</span>
   </div>
   <div class="img-band-item">
-    <img src="img/hcmc-street.jpg" alt="Ho Chi Minh City" />
+    <img src="img/hcmc-night.jpg" alt="Ho Chi Minh City at night" />
     <span class="img-band-label">Ho Chi Minh City</span>
+  </div>
+  <div class="img-band-item">
+    <img src="img/ninh-binh.jpg" alt="Ninh Binh pagoda" />
+    <span class="img-band-label">Ninh Binh</span>
+  </div>
+  <div class="img-band-item">
+    <img src="img/pho.jpg" alt="Vietnamese pho" />
+    <span class="img-band-label">Pho</span>
   </div>
   <div class="img-band-item">
     <img src="img/street-food.jpg" alt="Vietnamese street food" />
@@ -764,10 +773,17 @@
     </div>
   </div>
 
+  <!-- HCMC photo row -->
+  <div class="section-photo-row three" data-reveal>
+    <img src="img/cu-chi.jpg" alt="Cu Chi Tunnels" />
+    <img src="img/mekong-boat.jpg" alt="Mekong Delta boat" />
+    <img src="img/banh-mi.jpg" alt="Banh mi" />
+  </div>
+
   <!-- HANOI -->
   <div class="section-photo-row" data-reveal>
     <img src="img/hanoi-old-quarter.jpg" alt="Hanoi Old Quarter" />
-    <img src="img/mekong.jpg" alt="Mekong Delta" />
+    <img src="img/hoan-kiem.jpg" alt="Hoan Kiem Lake" />
   </div>
   <div class="city-block">
     <div class="city-header" data-reveal="left">
@@ -930,11 +946,6 @@
   <h2 class="section-title" data-reveal>The Route</h2>
   <p class="section-intro" data-reveal>Three weeks from the Mekong Delta to Ha Long Bay. We fly into Ho Chi Minh City, spend four days in the south, then fly north to Hanoi for the second leg.</p>
   <div class="section-divider" data-reveal></div>
-
-  <!-- Artistic route map -->
-  <div class="route-map-wrap" data-reveal>
-    <img src="img/vietnam_map.png" alt="Vietnam travel route map showing our journey from Ho Chi Minh City to Ha Long Bay" />
-  </div>
 
   <div class="map-features">
 
