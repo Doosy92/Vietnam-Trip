@@ -139,7 +139,7 @@
     .hero-right { position: relative; overflow: hidden; }
     .hero-map-img {
       position: absolute; inset: 0; width: 100%; height: 100%;
-      object-fit: cover; object-position: 76% center; display: block;
+      object-fit: contain; object-position: center center; display: block;
     }
     .hero-right-scrim {
       position: absolute; inset: 0; z-index: 1; pointer-events: none;
@@ -1075,7 +1075,7 @@
   (function () {
     const panel = document.getElementById('hero-right');
     if (!panel) return;
-    const IMG_W = 1400, IMG_H = 700, OBJ_X = 0.76, OBJ_Y = 0.5;
+    const IMG_W = 1400, IMG_H = 700;
     const CITIES = {
       hcmc:     { x: 885, y: 558 },
       mekong:   { x: 841, y: 588 },
@@ -1086,9 +1086,9 @@
     };
     function position() {
       const pW = panel.offsetWidth, pH = panel.offsetHeight;
-      const scale = Math.max(pW / IMG_W, pH / IMG_H);
-      const ox = -(IMG_W * scale - pW) * OBJ_X;
-      const oy = -(IMG_H * scale - pH) * OBJ_Y;
+      const scale = Math.min(pW / IMG_W, pH / IMG_H);
+      const ox = (pW - IMG_W * scale) * 0.5;
+      const oy = (pH - IMG_H * scale) * 0.5;
       panel.querySelectorAll('.hero-pin').forEach(pin => {
         const c = CITIES[pin.dataset.hcity];
         if (!c) return;
