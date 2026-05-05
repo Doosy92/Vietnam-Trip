@@ -1106,19 +1106,20 @@
   (function () {
     const panel = document.getElementById('hero-right');
     if (!panel) return;
-    const IMG_W = 2800, IMG_H = 1400;
+    const IMG_W = 1600, IMG_H = 1400;
+    // Coords are original 2800px x values minus the 1200px crop offset
     const CITIES = {
-      hcmc:     { x: 1770, y: 1116 },
-      mekong:   { x: 1682, y: 1176 },
-      cuchi:    { x: 1753, y: 1080 },
-      ninhbinh: { x: 1713, y:  333 },
-      hanoi:    { x: 1703, y:  267 },
-      halong:   { x: 1807, y:  279 },
+      hcmc:     { x:  570, y: 1116 },
+      mekong:   { x:  482, y: 1176 },
+      cuchi:    { x:  553, y: 1080 },
+      ninhbinh: { x:  513, y:  333 },
+      hanoi:    { x:  503, y:  267 },
+      halong:   { x:  607, y:  279 },
     };
     function position() {
       const pW = panel.offsetWidth, pH = panel.offsetHeight;
       const scale = Math.max(pW / IMG_W, pH / IMG_H);
-      // object-fit: cover; object-position: right center
+      // background-size: cover; background-position: right center
       const ox = -(IMG_W * scale - pW) * 1.0;
       const oy = -(IMG_H * scale - pH) * 0.5;
       panel.querySelectorAll('.hero-pin').forEach(pin => {
