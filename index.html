@@ -6,7 +6,7 @@
   <title>The Doos Vietnam Trip: June 2026</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Be+Vietnam+Pro:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Italiana&family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Be+Vietnam+Pro:wght@300;400;500;600&display=swap" rel="stylesheet" />
   <style>
     :root {
       --red:     #C8102E;
@@ -79,30 +79,56 @@
         radial-gradient(ellipse 80% 50% at 0% 20%, rgba(200,16,46,0.08) 0%, transparent 70%),
         radial-gradient(ellipse 60% 40% at 110% 90%, rgba(245,168,0,0.06) 0%, transparent 60%);
     }
-    .hero-brand { margin-bottom: 2rem; }
-    .hero-brand-name {
+    /* CARTOGRAPHIC TITLE TREATMENT */
+    .hero-carto-title {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+    .hero-carto-eyebrow {
+      font-family: 'Be Vietnam Pro', sans-serif;
+      font-size: 0.55rem;
+      letter-spacing: 0.5em;
+      text-transform: uppercase;
+      color: rgba(245,168,0,0.55);
+      margin-bottom: 0.9rem;
       display: block;
-      font-family: 'Playfair Display', serif;
-      font-size: clamp(1.9rem, 2.8vw, 2.6rem);
-      font-weight: 900; font-style: normal;
-      color: var(--cream);
-      letter-spacing: 0.32em; text-transform: uppercase;
+    }
+    .hero-carto-rule {
+      height: 1px;
+      background: linear-gradient(to right, transparent, rgba(245,168,0,0.45), transparent);
+      margin: 0.8rem 0;
+    }
+    .hero-carto-name {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.6rem;
       line-height: 1;
-      margin-bottom: 0.65rem;
-      padding-bottom: 0.65rem;
-      border-bottom: 1px solid rgba(245,168,0,0.25);
+      padding: 0.3rem 0;
     }
-    .hero-brand-meta {
+    .hero-carto-viet, .hero-carto-nam {
+      font-family: 'Italiana', serif;
+      font-size: clamp(3.8rem, 6vw, 6.4rem);
+      color: var(--cream);
+      letter-spacing: 0.12em;
+      line-height: 1;
+    }
+    .hero-carto-diamond {
+      color: var(--gold);
+      font-size: 0.7rem;
+      opacity: 0.75;
+      align-self: center;
+      margin-top: 0.2rem;
+    }
+    .hero-carto-footer {
+      font-family: 'Be Vietnam Pro', sans-serif;
+      font-size: 0.55rem;
+      letter-spacing: 0.4em;
+      text-transform: uppercase;
+      color: rgba(245,168,0,0.42);
       display: block;
-      font-size: 0.6rem; letter-spacing: 0.3em; text-transform: uppercase;
-      color: rgba(253,246,227,0.42); font-weight: 400;
+      margin-top: 0.3rem;
     }
-    .hero-dash-title {
-      font-family: 'Playfair Display', serif;
-      font-size: clamp(2.6rem, 4vw, 4.6rem);
-      font-weight: 900; line-height: 0.94; margin-bottom: 1.1rem;
-    }
-    .hero-dash-title em { font-style: italic; color: var(--gold); display: block; }
     .hero-dash-sub {
       font-size: 0.86rem; line-height: 1.85;
       color: rgba(253,246,227,0.48); margin-bottom: 1.8rem;
@@ -139,7 +165,7 @@
     .hero-right { position: relative; overflow: hidden; }
     .hero-map-img {
       position: absolute; inset: 0; width: 100%; height: 100%;
-      object-fit: contain; object-position: center center; display: block;
+      object-fit: cover; object-position: right center; display: block;
     }
     .hero-right-scrim {
       position: absolute; inset: 0; z-index: 1; pointer-events: none;
@@ -409,11 +435,17 @@
 
   <!-- LEFT: info panel -->
   <div class="hero-left">
-    <div class="hero-brand">
-      <span class="hero-brand-name">The Doos</span>
-      <span class="hero-brand-meta">Family Trip &nbsp;·&nbsp; Vietnam &nbsp;·&nbsp; June 2026</span>
+    <div class="hero-carto-title">
+      <span class="hero-carto-eyebrow">Family Expedition</span>
+      <div class="hero-carto-rule"></div>
+      <div class="hero-carto-name">
+        <span class="hero-carto-viet">VIET</span>
+        <span class="hero-carto-diamond">◆</span>
+        <span class="hero-carto-nam">NAM</span>
+      </div>
+      <div class="hero-carto-rule"></div>
+      <span class="hero-carto-footer">The Doos &nbsp;·&nbsp; June 2026</span>
     </div>
-    <h1 class="hero-dash-title">Vietnam<em>June 2026.</em></h1>
     <p class="hero-dash-sub">Two weeks. South to north. From Saigon's streets to Ha Long Bay's limestone towers.</p>
     <div class="hero-travellers">
       <span class="traveller-pill">👩 Christine</span>
@@ -1075,20 +1107,21 @@
   (function () {
     const panel = document.getElementById('hero-right');
     if (!panel) return;
-    const IMG_W = 1400, IMG_H = 700;
+    const IMG_W = 2800, IMG_H = 1400;
     const CITIES = {
-      hcmc:     { x: 885, y: 558 },
-      mekong:   { x: 841, y: 588 },
-      cuchi:    { x: 877, y: 540 },
-      ninhbinh: { x: 857, y: 167 },
-      hanoi:    { x: 852, y: 134 },
-      halong:   { x: 904, y: 140 },
+      hcmc:     { x: 1770, y: 1116 },
+      mekong:   { x: 1682, y: 1176 },
+      cuchi:    { x: 1753, y: 1080 },
+      ninhbinh: { x: 1713, y:  333 },
+      hanoi:    { x: 1703, y:  267 },
+      halong:   { x: 1807, y:  279 },
     };
     function position() {
       const pW = panel.offsetWidth, pH = panel.offsetHeight;
-      const scale = Math.min(pW / IMG_W, pH / IMG_H);
-      const ox = (pW - IMG_W * scale) * 0.5;
-      const oy = (pH - IMG_H * scale) * 0.5;
+      const scale = Math.max(pW / IMG_W, pH / IMG_H);
+      // object-fit: cover; object-position: right center
+      const ox = -(IMG_W * scale - pW) * 1.0;
+      const oy = -(IMG_H * scale - pH) * 0.5;
       panel.querySelectorAll('.hero-pin').forEach(pin => {
         const c = CITIES[pin.dataset.hcity];
         if (!c) return;
