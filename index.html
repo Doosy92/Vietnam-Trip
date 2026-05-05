@@ -1069,6 +1069,10 @@
 </footer>
 
 <script>
+  // Always start at top on load/refresh
+  if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+  window.scrollTo(0, 0);
+
   // ACCORDION
   function toggleDay(card) { card.classList.toggle('open'); }
 
