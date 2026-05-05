@@ -165,7 +165,7 @@
     /* RIGHT MAP PANEL */
     .hero-right {
       position: relative; overflow: hidden; min-height: 0;
-      background: url('img/vietnam_map.png') right center / cover no-repeat;
+      background: url('img/vietnam_map.png') center center / contain no-repeat, var(--dark);
     }
     .hero-right-scrim {
       position: absolute; inset: 0; z-index: 1; pointer-events: none;
@@ -1106,22 +1106,22 @@
   (function () {
     const panel = document.getElementById('hero-right');
     if (!panel) return;
-    const IMG_W = 1600, IMG_H = 1400;
-    // Coords are original 2800px x values minus the 1200px crop offset
+    const IMG_W = 800, IMG_H = 1350;
+    // Coords: original 2800px values → minus 1200 (first crop) → minus 100,20 (tight crop)
     const CITIES = {
-      hcmc:     { x:  570, y: 1116 },
-      mekong:   { x:  482, y: 1176 },
-      cuchi:    { x:  553, y: 1080 },
-      ninhbinh: { x:  513, y:  333 },
-      hanoi:    { x:  503, y:  267 },
-      halong:   { x:  607, y:  279 },
+      hcmc:     { x: 470, y: 1096 },
+      mekong:   { x: 382, y: 1156 },
+      cuchi:    { x: 453, y: 1060 },
+      ninhbinh: { x: 413, y:  313 },
+      hanoi:    { x: 403, y:  247 },
+      halong:   { x: 507, y:  259 },
     };
     function position() {
       const pW = panel.offsetWidth, pH = panel.offsetHeight;
-      const scale = Math.max(pW / IMG_W, pH / IMG_H);
-      // background-size: cover; background-position: right center
-      const ox = -(IMG_W * scale - pW) * 1.0;
-      const oy = -(IMG_H * scale - pH) * 0.5;
+      // background-size: contain; background-position: center
+      const scale = Math.min(pW / IMG_W, pH / IMG_H);
+      const ox = (pW - IMG_W * scale) * 0.5;
+      const oy = (pH - IMG_H * scale) * 0.5;
       panel.querySelectorAll('.hero-pin').forEach(pin => {
         const c = CITIES[pin.dataset.hcity];
         if (!c) return;
