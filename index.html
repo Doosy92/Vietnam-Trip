@@ -163,10 +163,9 @@
     }
 
     /* RIGHT MAP PANEL */
-    .hero-right { position: relative; overflow: hidden; }
-    .hero-map-img {
-      position: absolute; inset: 0; width: 100%; height: 100%;
-      object-fit: cover; object-position: right center; display: block;
+    .hero-right {
+      position: relative; overflow: hidden; min-height: 0;
+      background: url('img/vietnam_map.png') right center / cover no-repeat;
     }
     .hero-right-scrim {
       position: absolute; inset: 0; z-index: 1; pointer-events: none;
@@ -475,7 +474,6 @@
 
   <!-- RIGHT: map panel with city pins -->
   <div class="hero-right" id="hero-right">
-    <img src="img/vietnam_map.png" alt="Vietnam route map" class="hero-map-img" />
     <div class="hero-right-scrim"></div>
     <div class="hero-right-grid"></div>
 
