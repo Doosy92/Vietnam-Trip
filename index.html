@@ -405,6 +405,33 @@
     .hotel-note { padding: 0.8rem; background: rgba(245,168,0,0.06); border: 1px solid rgba(245,168,0,0.15); border-radius: 10px; font-size: 0.8rem; line-height: 1.6; opacity: 0.85; }
     .hotel-note strong { color: var(--gold); }
 
+    /* NAV CLOCK */
+    .nav-clock {
+      display: flex; align-items: center; gap: 0.55rem;
+      color: rgba(253,246,227,0.42); white-space: nowrap;
+    }
+    .nav-clock-city { display: flex; flex-direction: column; align-items: center; }
+    .nav-clock-label { font-size: 0.48rem; letter-spacing: 0.18em; text-transform: uppercase; color: rgba(245,168,0,0.5); line-height: 1; margin-bottom: 0.15rem; }
+    .nav-clock-time { font-size: 0.68rem; font-variant-numeric: tabular-nums; letter-spacing: 0.04em; line-height: 1; }
+    .nav-clock-sep { font-size: 0.5rem; opacity: 0.3; align-self: center; }
+
+    /* PHRASES SECTION */
+    .phrases-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+      gap: 0.85rem; margin-top: 2rem;
+    }
+    .phrase-card {
+      background: rgba(255,255,255,0.03); border: 1px solid rgba(245,168,0,0.12);
+      border-radius: 14px; padding: 1.1rem 1.2rem;
+      transition: border-color 0.2s, background 0.2s;
+      cursor: default;
+    }
+    .phrase-card:hover { border-color: rgba(245,168,0,0.3); background: rgba(245,168,0,0.05); }
+    .phrase-viet { font-family: 'Playfair Display', serif; font-size: 1.15rem; font-weight: 700; color: var(--cream); margin-bottom: 0.2rem; }
+    .phrase-phon { font-size: 0.68rem; color: rgba(245,168,0,0.65); letter-spacing: 0.04em; font-style: italic; margin-bottom: 0.5rem; }
+    .phrase-eng { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.12em; color: rgba(253,246,227,0.38); }
+    .phrase-note { font-size: 0.65rem; color: rgba(253,246,227,0.3); margin-top: 0.4rem; font-style: italic; }
+
     /* FOOTER */
     footer { text-align: center; padding: 3rem 2rem; border-top: 1px solid rgba(255,255,255,0.06); font-size: 0.78rem; opacity: 0.35; }
 
@@ -413,13 +440,25 @@
       nav { padding: 0.8rem 1rem; }
       .nav-links { gap: 0.8rem; }
       .nav-links a { font-size: 0.68rem; }
-      .hero-dashboard { grid-template-columns: 1fr; height: auto; min-height: 100svh; }
-      .hero-left { padding: 5.5rem 1.8rem 2.5rem; border-right: none; border-bottom: 1px solid rgba(245,168,0,0.15); }
-      .hero-right { height: 52vw; min-height: 200px; }
+      .hero-dashboard { grid-template-columns: 1fr; height: auto; min-height: 100dvh; }
+      .hero-left { padding: 5rem 1.5rem 2rem; border-right: none; border-bottom: 1px solid rgba(245,168,0,0.15); }
+      .hero-right { height: 60vw; min-height: 240px; }
       .hero-coords { display: none; }
       .map-pins { grid-template-columns: 1fr 1fr; }
       .map-pin { border-right: none; border-bottom: 1px solid rgba(255,255,255,0.07); }
       .map-pin:last-child { border-bottom: none; }
+      .phrases-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 500px) {
+      .mel-only { display: none; }
+      .nav-links a { font-size: 0.62rem; letter-spacing: 0.04em; }
+      .nav-links { gap: 0.6rem; }
+      .act-chip { font-size: 0.68rem; padding: 0.5rem 0.8rem; min-height: 44px; }
+      .act-close { width: 44px; height: 44px; font-size: 1rem; }
+      .hero-carto-viet, .hero-carto-nam { font-size: clamp(3rem, 12vw, 5rem); }
+      .countdown-boxes { gap: 0.5rem; }
+      .countdown-box { padding: 0.6rem 0.7rem; min-width: 54px; }
+      .phrases-grid { grid-template-columns: 1fr 1fr; gap: 0.6rem; }
     }
 
     ::-webkit-scrollbar { width: 6px; }
@@ -498,6 +537,11 @@
 <!-- NAV -->
 <nav id="main-nav">
   <div class="nav-logo">🇻🇳 The Doos · Vietnam '26</div>
+  <div class="nav-clock" id="nav-clock">
+    <div class="nav-clock-city mel-only"><div class="nav-clock-label">MEL</div><div class="nav-clock-time" id="clock-mel">--:--</div></div>
+    <div class="nav-clock-sep mel-only">·</div>
+    <div class="nav-clock-city"><div class="nav-clock-label">SGN</div><div class="nav-clock-time" id="clock-sgn">--:--</div></div>
+  </div>
   <ul class="nav-links">
     <li><a href="#overview">Flights</a></li>
     <li><a href="#itinerary">Itinerary</a></li>
@@ -638,19 +682,19 @@
         <div><div class="flight-city">Ho Chi Minh City</div><div class="flight-code">SGN · Terminal 2</div></div>
       </div>
       <span class="flight-date">Thursday 11 June 2026</span>
-      <div class="flight-meta">Departs 10:35 AM · Arrives 4:15 PM<br>Flight duration ~8 hrs 40 min</div>
+      <div class="flight-meta">Departs 10:35 AM · Arrives 4:15 PM<br>Flight duration ~8 hrs 40 min<br><span style="opacity:0.5;font-size:0.78em">Vietnam Airlines · VN780 · Airbus A350</span></div>
       <div class="tz-note">⏰ Vietnam is 3 hours behind Melbourne (AEST). When we land at 4:15 PM local time, your body will think it's 7:15 PM, which is pretty manageable! The drive from Tan Son Nhat Airport to our hotel in District 3 is about 45 minutes.</div>
     </div>
 
     <div class="flight-card" data-reveal delay-2>
       <span class="flight-badge">✈ Internal</span>
       <div class="flight-route">
-        <div><div class="flight-city">Ho Chi Minh City</div><div class="flight-code">SGN · Terminal 3</div></div>
+        <div><div class="flight-city">Ho Chi Minh City</div><div class="flight-code">SGN · Terminal 1</div></div>
         <div class="flight-arrow">→</div>
         <div><div class="flight-city">Hanoi</div><div class="flight-code">HAN · Terminal 1</div></div>
       </div>
       <span class="flight-date">Monday 15 June 2026</span>
-      <div class="flight-meta">Departs 8:30 PM · Arrives 10:35 PM<br>Flight duration ~2 hrs 5 min<br><br>Late arrival, so I'll pre-book our transfer to the Hanoi hotel so we're not figuring it out at midnight half asleep.</div>
+      <div class="flight-meta">Departs 8:30 PM · Arrives 10:35 PM<br>Flight duration ~2 hrs 5 min<br><span style="opacity:0.5;font-size:0.78em">Domestic · Airline TBC · To confirm on booking</span><br><br>Late arrival — I'll pre-book our transfer to the Hanoi hotel so we're not figuring it out at midnight half asleep.</div>
     </div>
 
     <div class="flight-card" data-reveal delay-3>
@@ -661,7 +705,7 @@
         <div><div class="flight-city">Melbourne</div><div class="flight-code">MEL · Terminal 2</div></div>
       </div>
       <span class="flight-date">Tuesday 23 June 2026</span>
-      <div class="flight-meta">Departs 9:55 AM · Arrives 10:15 PM<br>Flight duration ~9 hrs 20 min<br><br>We need to leave the hotel by 7:30 AM. Yes I know. Last day. Sorry 😅</div>
+      <div class="flight-meta">Departs 9:55 AM · Arrives 10:15 PM<br>Flight duration ~9 hrs 20 min<br><span style="opacity:0.5;font-size:0.78em">Vietnam Airlines · VN779 · Airbus A350-900</span><br><br>We need to leave the hotel by 7:30 AM. Yes I know. Last day. Sorry 😅</div>
       <div class="tz-note">⏰ Heading home we jump forward 3 hours. Melbourne is ahead of Vietnam. The flight's ~9.5 hrs but you land feeling like you've skipped half the day. We need to be at Noi Bai Airport by 8:25am, which means leaving the hotel at 7:30am sharp.</div>
     </div>
   </div>
@@ -1166,6 +1210,78 @@
   </div>
 </section>
 
+<section id="phrases">
+  <p class="section-eyebrow" data-reveal>Speak Like a Local</p>
+  <h2 class="section-title" data-reveal>Vietnamese Phrases</h2>
+  <p class="section-intro" data-reveal>You don't need much — but knowing a few words goes a long way. Locals genuinely appreciate the effort, even if your pronunciation is a disaster.</p>
+  <div class="section-divider" data-reveal></div>
+  <div class="phrases-grid">
+    <div class="phrase-card" data-reveal>
+      <div class="phrase-viet">Xin chào</div>
+      <div class="phrase-phon">sin chow</div>
+      <div class="phrase-eng">Hello</div>
+    </div>
+    <div class="phrase-card" data-reveal>
+      <div class="phrase-viet">Cảm ơn</div>
+      <div class="phrase-phon">gahm un</div>
+      <div class="phrase-eng">Thank you</div>
+    </div>
+    <div class="phrase-card" data-reveal>
+      <div class="phrase-viet">Xin lỗi</div>
+      <div class="phrase-phon">sin loy</div>
+      <div class="phrase-eng">Sorry / Excuse me</div>
+    </div>
+    <div class="phrase-card" data-reveal>
+      <div class="phrase-viet">Bao nhiêu?</div>
+      <div class="phrase-phon">bow nyew</div>
+      <div class="phrase-eng">How much?</div>
+    </div>
+    <div class="phrase-card" data-reveal>
+      <div class="phrase-viet">Đắt quá</div>
+      <div class="phrase-phon">daht kwah</div>
+      <div class="phrase-eng">Too expensive</div>
+      <div class="phrase-note">Use this freely at markets</div>
+    </div>
+    <div class="phrase-card" data-reveal>
+      <div class="phrase-viet">Ngon lắm!</div>
+      <div class="phrase-phon">ngon lahm</div>
+      <div class="phrase-eng">Delicious!</div>
+      <div class="phrase-note">Say this after every meal</div>
+    </div>
+    <div class="phrase-card" data-reveal>
+      <div class="phrase-viet">Không, cảm ơn</div>
+      <div class="phrase-phon">khome, gahm un</div>
+      <div class="phrase-eng">No thank you</div>
+    </div>
+    <div class="phrase-card" data-reveal>
+      <div class="phrase-viet">Tính tiền</div>
+      <div class="phrase-phon">ting tyen</div>
+      <div class="phrase-eng">Bill please</div>
+    </div>
+    <div class="phrase-card" data-reveal>
+      <div class="phrase-viet">Nước</div>
+      <div class="phrase-phon">nuoc</div>
+      <div class="phrase-eng">Water</div>
+    </div>
+    <div class="phrase-card" data-reveal>
+      <div class="phrase-viet">...ở đâu?</div>
+      <div class="phrase-phon">uh doh</div>
+      <div class="phrase-eng">Where is...?</div>
+    </div>
+    <div class="phrase-card" data-reveal>
+      <div class="phrase-viet">Một hai ba, dô!</div>
+      <div class="phrase-phon">mot hi ba, yo!</div>
+      <div class="phrase-eng">Cheers!</div>
+      <div class="phrase-note">The most important one</div>
+    </div>
+    <div class="phrase-card" data-reveal>
+      <div class="phrase-viet">Tôi không hiểu</div>
+      <div class="phrase-phon">toy khome hyew</div>
+      <div class="phrase-eng">I don't understand</div>
+    </div>
+  </div>
+</section>
+
 <footer>
   <p>🇻🇳 The Doos Vietnam Trip · June 2026</p>
   <p style="margin-top:0.4rem;">Christine · Ashraf · Jason · Chris ✈</p>
@@ -1176,6 +1292,19 @@
   // Always start at top on load/refresh
   if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
   window.scrollTo(0, 0);
+
+  // LIVE CLOCKS
+  (function() {
+    const melEl = document.getElementById('clock-mel');
+    const sgnEl = document.getElementById('clock-sgn');
+    const fmt = tz => new Date().toLocaleTimeString('en-AU', { timeZone: tz, hour: '2-digit', minute: '2-digit', hour12: false });
+    function tick() {
+      if (melEl) melEl.textContent = fmt('Australia/Melbourne');
+      if (sgnEl) sgnEl.textContent = fmt('Asia/Ho_Chi_Minh');
+    }
+    tick();
+    setInterval(tick, 1000);
+  })();
 
   // SCROLL REVEAL — photos slide in as you scroll
   (function () {
