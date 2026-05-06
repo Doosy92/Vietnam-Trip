@@ -425,6 +425,57 @@
     ::-webkit-scrollbar { width: 6px; }
     ::-webkit-scrollbar-track { background: var(--dark); }
     ::-webkit-scrollbar-thumb { background: rgba(245,168,0,0.3); border-radius: 3px; }
+    /* ACTIVITY CHIPS (inside day cards) */
+    .act-chips { display: flex; flex-wrap: wrap; gap: 0.5rem; padding: 1rem 1.5rem 1.4rem; border-top: 1px solid rgba(255,255,255,0.06); margin-top: 0.8rem; }
+    .act-chip {
+      display: inline-flex; align-items: center; gap: 0.4rem;
+      padding: 0.42rem 0.9rem; border-radius: 100px;
+      border: 1px solid rgba(245,168,0,0.3); background: rgba(245,168,0,0.06);
+      color: var(--gold); font-size: 0.72rem; font-weight: 500; font-family: 'Be Vietnam Pro', sans-serif;
+      cursor: pointer; transition: background 0.2s, border-color 0.2s;
+    }
+    .act-chip:hover { background: rgba(245,168,0,0.16); border-color: rgba(245,168,0,0.7); }
+    .act-chip-arrow { font-size: 0.6rem; opacity: 0.55; margin-left: 0.1rem; }
+
+    /* ACTIVITY MODAL */
+    .act-overlay {
+      position: fixed; inset: 0; z-index: 2000;
+      background: rgba(0,0,0,0.72); backdrop-filter: blur(6px);
+      opacity: 0; pointer-events: none; transition: opacity 0.3s;
+      display: flex; align-items: flex-end; justify-content: center;
+    }
+    .act-overlay.open { opacity: 1; pointer-events: auto; }
+    .act-panel {
+      width: min(100%, 560px); max-height: 90vh;
+      border-radius: 24px 24px 0 0;
+      background: #1c110a; overflow-y: auto;
+      transform: translateY(100%);
+      transition: transform 0.42s cubic-bezier(0.32,0.72,0,1);
+      position: relative;
+    }
+    .act-overlay.open .act-panel { transform: translateY(0); }
+    .act-panel-photo { width: 100%; height: 220px; object-fit: cover; display: block; filter: brightness(0.75) saturate(1.1); border-radius: 24px 24px 0 0; }
+    .act-panel-body { padding: 1.6rem 1.8rem 2.5rem; }
+    .act-panel-tags { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 0.9rem; }
+    .act-panel-tag { font-size: 0.58rem; letter-spacing: 0.12em; text-transform: uppercase; padding: 0.22rem 0.65rem; border-radius: 100px; background: rgba(245,168,0,0.1); color: var(--gold); border: 1px solid rgba(245,168,0,0.25); }
+    .act-panel-title { font-family: 'Playfair Display', serif; font-size: 1.75rem; font-weight: 700; margin-bottom: 0.25rem; line-height: 1.2; }
+    .act-panel-meta { font-size: 0.7rem; color: rgba(253,246,227,0.4); letter-spacing: 0.06em; margin-bottom: 1.2rem; }
+    .act-panel-desc { font-size: 0.86rem; line-height: 1.85; color: rgba(253,246,227,0.72); margin-bottom: 1.4rem; }
+    .act-panel-h { font-size: 0.58rem; letter-spacing: 0.28em; text-transform: uppercase; color: var(--gold); opacity: 0.55; margin-bottom: 0.75rem; }
+    .act-panel ul { list-style: none; padding: 0; margin: 0 0 1.4rem; }
+    .act-panel ul li { padding: 0.55rem 0 0.55rem 1.1rem; border-bottom: 1px solid rgba(255,255,255,0.05); font-size: 0.83rem; line-height: 1.75; color: rgba(253,246,227,0.68); position: relative; }
+    .act-panel ul li::before { content: '—'; position: absolute; left: 0; color: var(--gold); opacity: 0.45; }
+    .act-panel ul li:last-child { border-bottom: none; }
+    .act-panel-tip { background: rgba(245,168,0,0.07); border-left: 2px solid rgba(245,168,0,0.6); border-radius: 0 8px 8px 0; padding: 0.9rem 1.1rem; font-size: 0.81rem; line-height: 1.75; color: rgba(253,246,227,0.62); }
+    .act-close {
+      position: absolute; top: 0.9rem; right: 0.9rem; z-index: 10;
+      width: 34px; height: 34px; border-radius: 50%;
+      background: rgba(0,0,0,0.55); border: 1px solid rgba(255,255,255,0.15);
+      color: rgba(255,255,255,0.75); font-size: 0.9rem; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .act-not-booked { font-size: 0.68rem; color: rgba(200,16,46,0.75); letter-spacing: 0.06em; margin-bottom: 1.2rem; font-style: italic; }
+
     /* SCROLL TO TOP BUTTON */
     #scroll-top {
       position: fixed; bottom: 2rem; right: 2rem; z-index: 998;
@@ -670,6 +721,10 @@
             <li>The market area turns into a street food night market after 6pm, which is a great way to spend the evening.</li>
           </ul>
           <div class="tip-note">Haggling is expected at Ben Thanh. Start low and just walk away if they won't budge. Works every time.</div>
+          <div class="act-chips">
+            <button class="act-chip" onclick="openActivity('war-museum');event.stopPropagation()">🏛️ War Remnants Museum <span class="act-chip-arrow">↗</span></button>
+            <button class="act-chip" onclick="openActivity('ben-thanh');event.stopPropagation()">🛒 Ben Thanh Market <span class="act-chip-arrow">↗</span></button>
+          </div>
         </div></div>
       </div>
 
@@ -690,6 +745,9 @@
             <li>Back at the hotel by mid-afternoon (another 1.5 hrs back). Rooftop pool. You'll have earnt it.</li>
           </ul>
           <div class="tip-note">Everything is at your own pace, with plenty of shade and benches, no rushing.</div>
+          <div class="act-chips">
+            <button class="act-chip" onclick="openActivity('cu-chi');event.stopPropagation()">🪖 Cu Chi Tunnels <span class="act-chip-arrow">↗</span></button>
+          </div>
         </div></div>
       </div>
 
@@ -710,6 +768,9 @@
             <li>There's a narrow canal canoe ride where local rowers take you through the jungle. You just sit back and take it in.</li>
             <li>Last night in HCMC when we get back, so let's find somewhere good for dinner.</li>
           </ul>
+          <div class="act-chips">
+            <button class="act-chip" onclick="openActivity('mekong');event.stopPropagation()">🚣 Mekong Delta Boat Tour <span class="act-chip-arrow">↗</span></button>
+          </div>
         </div></div>
       </div>
 
@@ -773,6 +834,9 @@
             <li>Walk down to Hoan Kiem Lake after. It's about 10 minutes on foot from Hoa Lo Prison. There's a little temple on an island in the middle connected by a red bridge which is really beautiful. Everything today is pretty much walkable.</li>
             <li>Afternoon wander through the Old Quarter's 36 streets (you could walk end to end in 20 minutes, but you won't), then street food in the evening. Try the egg coffee.</li>
           </ul>
+          <div class="act-chips">
+            <button class="act-chip" onclick="openActivity('hoa-lo');event.stopPropagation()">🏯 Hoa Lo Prison & Old Quarter <span class="act-chip-arrow">↗</span></button>
+          </div>
         </div></div>
       </div>
 
@@ -794,6 +858,9 @@
             <li>Sunrise on deck the next morning, breakfast on board, then the 3.5-hour coach back to Hanoi. We'll be back in the Old Quarter by early evening.</li>
           </ul>
           <div class="tip-note">Kayaking is completely optional. You can just sit on the deck and let the views do the work.</div>
+          <div class="act-chips">
+            <button class="act-chip" onclick="openActivity('halong');event.stopPropagation()">⛵ Ha Long Bay Cruise <span class="act-chip-arrow">↗</span></button>
+          </div>
         </div></div>
       </div>
 
@@ -814,6 +881,9 @@
             <li>Afternoon shopping in the Old Quarter. Hang Gai Street is walkable from the hotel, and Dong Xuan Market is about 15 minutes on foot through the old streets.</li>
             <li>For dinner, try Cha Ca La Vong. Turmeric fish cooked at the table with dill. Worth trying.</li>
           </ul>
+          <div class="act-chips">
+            <button class="act-chip" onclick="openActivity('temple');event.stopPropagation()">🏛️ Temple of Literature <span class="act-chip-arrow">↗</span></button>
+          </div>
         </div></div>
       </div>
 
@@ -835,6 +905,9 @@
             <li>Lunch in town. Local speciality is goat meat. Don't knock it until you've tried it.</li>
             <li>The 2-hour drive back means we'll be in Hanoi by early evening for a quiet night.</li>
           </ul>
+          <div class="act-chips">
+            <button class="act-chip" onclick="openActivity('ninh-binh');event.stopPropagation()">🛶 Ninh Binh & Trang An <span class="act-chip-arrow">↗</span></button>
+          </div>
         </div></div>
       </div>
 
@@ -855,6 +928,9 @@
             <li>Evening street food tour of the Old Quarter. About 3 hours. Banh Mi, egg coffee, spring rolls, and a Vietnamese sweet dessert called Che. Go in with an open mind on that last one.</li>
           </ul>
           <div class="tip-note">Egg coffee at Cafe Giang on Hang Gai Street. Whipped egg yolk over espresso. Tastes like liquid tiramisu. Do not skip it.</div>
+          <div class="act-chips">
+            <button class="act-chip" onclick="openActivity('street-food');event.stopPropagation()">🍜 Street Food Tour <span class="act-chip-arrow">↗</span></button>
+          </div>
         </div></div>
       </div>
 
@@ -874,6 +950,9 @@
             <li>My vote is a cooking class. Learn to make Pho, Banh Mi and spring rolls and actually go home able to cook the food we've been eating all trip.</li>
             <li>Other options: the Ho Chi Minh Mausoleum if anyone's curious (about 20 minutes by Grab from the Old Quarter), last minute shopping in the Old Quarter, or a spa day. All equally valid.</li>
           </ul>
+          <div class="act-chips">
+            <button class="act-chip" onclick="openActivity('cooking');event.stopPropagation()">👨‍🍳 Cooking Class <span class="act-chip-arrow">↗</span></button>
+          </div>
         </div></div>
       </div>
 
@@ -1221,5 +1300,151 @@
 </script>
 
 <button id="scroll-top" aria-label="Back to top">↑</button>
+
+<!-- ACTIVITY MODAL -->
+<div id="act-overlay" class="act-overlay" onclick="if(event.target===this)closeActivity()">
+  <div class="act-panel">
+    <button class="act-close" onclick="closeActivity()">✕</button>
+    <img id="act-photo" class="act-panel-photo" src="" alt="" />
+    <div class="act-panel-body">
+      <div class="act-panel-tags" id="act-tags"></div>
+      <h2 class="act-panel-title" id="act-title"></h2>
+      <div class="act-panel-meta" id="act-meta"></div>
+      <div class="act-not-booked" id="act-not-booked"></div>
+      <p class="act-panel-desc" id="act-desc"></p>
+      <div class="act-panel-h">What to Expect</div>
+      <ul id="act-expect"></ul>
+      <div class="act-panel-tip" id="act-tip"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+const ACTS = {
+  'war-museum': {
+    title: 'War Remnants Museum',
+    meta: '12 Jun · Ho Chi Minh City · ~2–3 hrs',
+    photo: 'img/war-museum.jpg',
+    tags: ['History', 'Culture'],
+    notBooked: false,
+    desc: 'One of the most powerful museums in Southeast Asia. Covers Vietnam\'s history through multiple conflicts with raw photography exhibits, outdoor military hardware, and moving personal accounts.',
+    expect: ['Go early — before 10am — to beat the heat and tour groups','Multiple halls covering French colonial era, American War, and its aftermath','Outdoor courtyard with aircraft, tanks and military equipment','Photography allowed throughout — bring a camera','Allow 2–3 hours to do it properly']
+  },
+  'ben-thanh': {
+    title: 'Ben Thanh Market & Night Market',
+    meta: '12 Jun · Ho Chi Minh City · Afternoon & Evening',
+    photo: 'img/ben-thanh.jpg',
+    tags: ['Shopping', 'Food', 'Culture'],
+    notBooked: false,
+    desc: 'Saigon\'s most iconic landmark market — chaotic, colourful, and full of everything. After 6pm the surrounding streets transform into a lively street food night market.',
+    expect: ['Hundreds of stalls: clothing, souvenirs, spices, lacquerware, coffee, silk','About 15 minutes walkable from District 3, or a quick Grab','Night market outside turns the whole area into a street food zone after 6pm','Great for gifts — lacquerware, Vietnamese coffee, silk scarves'],
+    tip: 'Haggling is expected and fun. Start at half the asking price. Walking away often brings the price right down.'
+  },
+  'cu-chi': {
+    title: 'Cu Chi Tunnels',
+    meta: '13 Jun · 1.5 hrs from HCMC · Full Day',
+    photo: 'img/cu-chi.jpg',
+    tags: ['History', 'Outdoors'],
+    notBooked: true,
+    desc: '250km of underground tunnels used by the Viet Cong during the Vietnam War. An extraordinary feat of engineering and human endurance set in dense jungle northwest of Saigon.',
+    expect: ['1.5-hour coach drive from HCMC — depart morning','Live demonstrations of jungle booby-trap mechanisms','Option to crawl through the tunnels — go for the widened tourist version','Outdoor jungle site with shade areas — back at hotel by mid-afternoon'],
+    tip: 'Wear dark, comfortable clothes — the tunnels are tight and warm. Bring plenty of water. The widened tourist tunnels are challenging enough.'
+  },
+  'mekong': {
+    title: 'Mekong Delta Boat Tour',
+    meta: '14 Jun · 1.5 hrs from HCMC · Full Day',
+    photo: 'img/mekong-boat.jpg',
+    tags: ['Nature', 'Food', 'Relaxed'],
+    notBooked: true,
+    desc: 'A full day out on Vietnam\'s great river system. Canals, rice paddies, coconut palms and small fishing villages — a completely different side of Vietnam to the city.',
+    expect: ['Coach south from HCMC, arriving at the delta by mid-morning','Narrow canoe ride through jungle canals — local rowers, you just sit back','Stops at a coconut candy factory, bee farm, and tropical fruit garden','Live traditional music performance; generous lunch included on site'],
+    tip: 'An all-day trip. Pack sun protection, a hat, and bring a camera. The canal canoe section is the standout.'
+  },
+  'hoa-lo': {
+    title: 'Hoa Lo Prison & Old Quarter',
+    meta: '16 Jun · Hanoi · Walking Day',
+    photo: 'img/hanoi-old-quarter.jpg',
+    tags: ['History', 'Walking', 'Culture'],
+    notBooked: false,
+    desc: 'Start at Hoa Lo Prison — the infamous "Hanoi Hilton" — then lose yourself in Hanoi\'s ancient 36 Streets and end at the serene Hoan Kiem Lake with its red bridge and island temple.',
+    expect: ['Hoa Lo is about 10 minutes on foot from most Old Quarter hotels','Audio guide is worth getting — spans two very different historical eras','The 36 Streets each historically sold one specific trade — look for the signs','Hoan Kiem Lake is a short walk from Hoa Lo; the red bridge and island temple are beautiful'],
+    tip: 'Get the audio guide at Hoa Lo. Everything today is walkable — wear comfortable shoes.'
+  },
+  'halong': {
+    title: 'Ha Long Bay Cruise',
+    meta: '17–18 Jun · Overnight · UNESCO World Heritage',
+    photo: 'img/halong-bay.jpg',
+    tags: ['Nature', 'Unmissable', 'Overnight'],
+    notBooked: true,
+    desc: 'Thousands of limestone karsts rising from emerald-green water. One of the most remarkable landscapes on earth. Two days on the bay, sleeping overnight on the boat.',
+    expect: ['3.5-hour coach from Hanoi — board around 11:30am, lunch on deck as you sail out','Afternoon cruising through karsts, cave visit, optional kayaking','Sunset on deck with drinks; fresh seafood dinner on board','Sunrise next morning, breakfast on deck, then return coach to Hanoi'],
+    tip: 'Kayaking is optional — sitting on deck watching the karsts pass works just fine. Bring a light layer for evenings on the water.'
+  },
+  'temple': {
+    title: 'Temple of Literature',
+    meta: '19 Jun · Hanoi · ~2 hrs',
+    photo: 'img/temple-literature.jpg',
+    tags: ['Culture', 'History'],
+    notBooked: false,
+    desc: 'Vietnam\'s first university, founded in 1070. Five beautifully preserved walled courtyards of traditional Vietnamese architecture dedicated to Confucius and the country\'s greatest scholars.',
+    expect: ['15-minute Grab from the Old Quarter','Five courtyards — each with its own distinct character and history','Stone stelae listing doctoral graduates dating back to the 1400s','Peaceful and photogenic — a real contrast to the busy city outside'],
+    tip: 'Hire a guide at the gate. The architecture tells a story that\'s invisible without context — worth every dong.'
+  },
+  'ninh-binh': {
+    title: 'Ninh Binh & Trang An',
+    meta: '20 Jun · 2 hrs from Hanoi · Day Trip',
+    photo: 'img/ninh-binh.jpg',
+    tags: ['Nature', 'History', 'Scenic'],
+    notBooked: true,
+    desc: 'Called the "inland Ha Long Bay" and it earns the name. The same dramatic limestone karsts — but surrounded by rice paddies, rivers and ancient temples instead of sea.',
+    expect: ['2-hour drive south — early 7:30am departure','2.5-hour rowboat through caves and past ancient temples at Trang An','Quiet, slow, and completely beautiful — local rowers do the work','Lunch in town; the local speciality is goat — try it'],
+    tip: 'The early start is non-negotiable. The boat section at Trang An is the best part of the day — completely peaceful.'
+  },
+  'street-food': {
+    title: 'Hanoi Street Food Tour',
+    meta: '21 Jun · Old Quarter · Evening (~3 hrs)',
+    photo: 'img/street-food.jpg',
+    tags: ['Food', 'Culture', 'Evening'],
+    notBooked: true,
+    desc: 'A guided 3-hour evening walk through the Old Quarter\'s best food stalls. Banh Mi, egg coffee, fresh spring rolls, Bun Cha, and Che — a Vietnamese sweet dessert worth keeping an open mind about.',
+    expect: ['Small-group walking tour through the best stalls in the Old Quarter','Multiple stops — Banh Mi, spring rolls, Bun Cha, egg coffee, Che dessert','Local guides who know exactly which stalls are the authentic ones','Runs in the evening when the Old Quarter really comes alive'],
+    tip: 'Go in hungry. The egg coffee at Cafe Giang is the standout stop — whipped egg yolk over espresso. Tastes like liquid tiramisu.'
+  },
+  'cooking': {
+    title: 'Vietnamese Cooking Class',
+    meta: '22 Jun · Old Quarter · ~4 hrs',
+    photo: 'img/cooking-class.jpg',
+    tags: ['Food', 'Fun', 'Culture'],
+    notBooked: true,
+    desc: 'Learn to make Pho, Banh Mi and fresh spring rolls with a local chef. Go home actually able to cook the food you\'ve been eating all trip — the best possible souvenir.',
+    expect: ['Usually starts with a guided market visit to source fresh ingredients','Hands-on cooking session with a local chef in a proper kitchen','Make Pho broth from scratch, fresh spring rolls, and Banh Mi','Sit down and eat everything you\'ve made at the end — always the best bit'],
+    tip: 'Not booked yet — look for small-group classes in the Old Quarter for a better experience than the big tourist ones. Usually 6–8 people max.'
+  }
+};
+
+function openActivity(id) {
+  const a = ACTS[id]; if (!a) return;
+  document.getElementById('act-photo').src = a.photo;
+  document.getElementById('act-photo').alt = a.title;
+  document.getElementById('act-title').textContent = a.title;
+  document.getElementById('act-meta').textContent = a.meta;
+  document.getElementById('act-tags').innerHTML = a.tags.map(t => `<span class="act-panel-tag">${t}</span>`).join('');
+  document.getElementById('act-desc').textContent = a.desc;
+  document.getElementById('act-expect').innerHTML = a.expect.map(e => `<li>${e}</li>`).join('');
+  const nb = document.getElementById('act-not-booked');
+  nb.textContent = a.notBooked ? '⚠ Not yet booked — ideas only' : '';
+  nb.style.display = a.notBooked ? 'block' : 'none';
+  const tip = document.getElementById('act-tip');
+  if (a.tip) { tip.textContent = a.tip; tip.style.display = 'block'; }
+  else tip.style.display = 'none';
+  document.getElementById('act-overlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeActivity() {
+  document.getElementById('act-overlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeActivity(); });
+</script>
 </body>
 </html>
