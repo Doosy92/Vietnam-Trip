@@ -1518,21 +1518,14 @@
   }, { passive: true });
   scrollTopBtn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
 
-  // LOADER FADE OUT
+  // LOADER FADE OUT — fires 1.4s after script parse (script is at bottom, DOM is ready)
   (function() {
     const loader = document.getElementById('loader');
     if (!loader) return;
-    function dismiss() {
+    setTimeout(function() {
       loader.classList.add('fade-out');
-      // Remove from DOM after transition to free memory
-      loader.addEventListener('transitionend', () => loader.remove(), { once: true });
-    }
-    // Minimum display time: 1.3s (matches bar animation + brief pause)
-    if (document.readyState === 'complete') {
-      setTimeout(dismiss, 1300);
-    } else {
-      window.addEventListener('load', () => setTimeout(dismiss, 1300));
-    }
+      setTimeout(function() { loader.remove(); }, 700);
+    }, 1400);
   })();
 
   // DRAG-TO-SCROLL image band
