@@ -624,6 +624,17 @@
     <div class="loader-footer">Doos Family &nbsp;·&nbsp; June 2026</div>
   </div>
 </div>
+<script>
+  // Isolated loader dismiss — own script tag so JS errors elsewhere can't stop it
+  setTimeout(function() {
+    var l = document.getElementById('loader');
+    if (!l) return;
+    l.style.transition = 'opacity 0.65s ease';
+    l.style.opacity = '0';
+    l.style.pointerEvents = 'none';
+    setTimeout(function() { if (l.parentNode) l.parentNode.removeChild(l); }, 700);
+  }, 1400);
+</script>
 
 <div class="scroll-progress" id="scroll-progress"></div>
 
@@ -1517,16 +1528,6 @@
     scrollTopBtn.classList.toggle('visible', window.scrollY > 400);
   }, { passive: true });
   scrollTopBtn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
-
-  // LOADER FADE OUT — fires 1.4s after script parse (script is at bottom, DOM is ready)
-  (function() {
-    const loader = document.getElementById('loader');
-    if (!loader) return;
-    setTimeout(function() {
-      loader.classList.add('fade-out');
-      setTimeout(function() { loader.remove(); }, 700);
-    }, 1400);
-  })();
 
   // DRAG-TO-SCROLL image band
   (function() {
