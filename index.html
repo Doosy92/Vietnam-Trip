@@ -1,1771 +1,849 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>The Doos Vietnam Trip: June 2026</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Italiana&family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Be+Vietnam+Pro:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <title>The Doos · Vietnam '26</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,700;12..96,800&family=Manrope:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap">
   <style>
+    /* === THEME TOKENS ============================================ */
     :root {
-      --red:     #C8102E;
-      --gold:    #F5A800;
-      --cream:   #FDF6E3;
-      --dark:    #1A1008;
-      --green:   #2D6A4F;
-      --teal:    #1B6CA8;
-      --orange:  #E85D04;
-      --warm:    #7B3F00;
-    }
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    html { scroll-behavior: smooth; overscroll-behavior-y: auto; }
-    body { font-family: 'Be Vietnam Pro', sans-serif; background: var(--dark); color: var(--cream); }
-    body > * { max-width: 100vw; overflow-x: hidden; }
+      /* Cultural palette */
+      --emerald:        oklch(0.32 0.07 165);
+      --emerald-deep:   oklch(0.22 0.06 165);
+      --emerald-ink:    oklch(0.14 0.035 180);
+      --lantern:        oklch(0.82 0.16 85);
+      --lantern-deep:   oklch(0.70 0.16 75);
+      --terracotta:     oklch(0.60 0.14 35);
+      --terracotta-hi:  oklch(0.68 0.16 38);
 
-    /* SCROLL PROGRESS BAR */
-    .scroll-progress {
-      position: fixed; top: 0; left: 0; height: 3px; width: 0%;
-      background: linear-gradient(90deg, var(--red), var(--gold));
-      z-index: 1001; transition: width 0.08s linear;
-      pointer-events: none;
+      --paper:          oklch(0.965 0.012 85);
+      --paper-deep:     oklch(0.93 0.018 82);
+      --ink:            oklch(0.16 0.025 200);
+      --ink-2:          oklch(0.22 0.03 200);
+
+      /* Live theme — default light/day */
+      --bg:        var(--paper);
+      --bg-2:      var(--paper-deep);
+      --fg:        var(--ink);
+      --fg-muted:  oklch(0.42 0.02 200);
+      --rule:      oklch(0.85 0.018 85);
+      --card:      #fff;
+      --card-fg:   var(--ink);
+      --accent:    var(--terracotta);
+      --accent-2:  var(--emerald);
+
+      --t-theme: 1100ms cubic-bezier(.55,.05,.25,1);
     }
 
-    /* SCROLL REVEAL */
-    [data-reveal] {
-      opacity: 0;
-      transform: translateY(40px);
-      transition: opacity 0.85s cubic-bezier(0.16, 1, 0.3, 1),
-                  transform 0.85s cubic-bezier(0.16, 1, 0.3, 1);
+    [data-theme="night"] {
+      --bg:        var(--emerald-ink);
+      --bg-2:      var(--emerald-deep);
+      --fg:        oklch(0.94 0.015 85);
+      --fg-muted:  oklch(0.72 0.025 85);
+      --rule:      oklch(0.28 0.04 180);
+      --card:      oklch(0.20 0.04 180);
+      --card-fg:   oklch(0.94 0.015 85);
+      --accent:    var(--lantern);
+      --accent-2:  var(--lantern-deep);
     }
-    [data-reveal="fade"]  { transform: none; }
-    [data-reveal="left"]  { transform: translateX(-40px); }
-    [data-reveal="right"] { transform: translateX(40px); }
-    [data-reveal="scale"] { transform: scale(0.93); }
-    [data-reveal].is-visible { opacity: 1; transform: none; }
-    .delay-1 { transition-delay: 0.08s; }
-    .delay-2 { transition-delay: 0.16s; }
-    .delay-3 { transition-delay: 0.24s; }
-    .delay-4 { transition-delay: 0.32s; }
-    .delay-5 { transition-delay: 0.40s; }
-    .delay-6 { transition-delay: 0.48s; }
 
-    /* NAV */
-    nav {
-      position: fixed; top: 0; left: 0; right: 0; z-index: 999;
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 1rem 2.5rem;
-      background: rgba(26,16,8,0.93); backdrop-filter: blur(10px);
-      border-bottom: 1px solid rgba(245,168,0,0.2);
-      transition: padding 0.3s, background 0.3s;
+    /* === RESET-ISH =============================================== */
+    *, *::before, *::after { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; }
+    html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+    body {
+      font-family: 'Manrope', system-ui, sans-serif;
+      font-size: 16px;
+      line-height: 1.55;
+      color: var(--fg);
+      background: var(--bg);
+      transition: background var(--t-theme), color var(--t-theme);
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
     }
-    nav.scrolled { padding: 0.7rem 2.5rem; background: rgba(26,16,8,0.98); }
-    .nav-logo { font-family: 'Playfair Display', serif; font-size: 1.1rem; font-weight: 700; color: var(--gold); }
-    .nav-links { display: flex; gap: 1.8rem; list-style: none; }
-    .nav-links a { color: var(--cream); text-decoration: none; font-size: 0.78rem; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; opacity: 0.8; transition: opacity 0.2s, color 0.2s; }
-    .nav-links a:hover { opacity: 1; color: var(--gold); }
+    img { max-width: 100%; display: block; }
+    button { font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; }
+    a { color: inherit; text-decoration: none; }
 
-    /* HERO DASHBOARD */
-    .hero-dashboard {
-      height: 100vh; min-height: 680px;
-      display: grid; grid-template-columns: 42% 58%;
-      position: relative; overflow: hidden; background: var(--dark);
+    /* === TYPE =================================================== */
+    .display {
+      font-family: 'Bricolage Grotesque', 'Manrope', sans-serif;
+      font-weight: 800;
+      font-stretch: 75%;
+      letter-spacing: -0.035em;
+      line-height: 0.85;
+      text-wrap: balance;
     }
-    .hero-left {
-      position: relative; z-index: 2;
-      display: flex; flex-direction: column; justify-content: center; align-items: center;
-      text-align: center;
-      padding: 7rem 3rem 3rem;
-      border-right: 1px solid rgba(245,168,0,0.18);
-      background:
-        radial-gradient(ellipse 80% 50% at 0% 20%, rgba(200,16,46,0.08) 0%, transparent 70%),
-        radial-gradient(ellipse 60% 40% at 110% 90%, rgba(245,168,0,0.06) 0%, transparent 60%);
+    .display-wide {
+      font-family: 'Bricolage Grotesque', sans-serif;
+      font-weight: 800;
+      font-stretch: 110%;
+      letter-spacing: -0.02em;
+      line-height: 0.9;
     }
-    /* CARTOGRAPHIC TITLE TREATMENT */
-    .hero-carto-title {
-      text-align: center;
-      margin-bottom: 2rem;
-    }
-    .hero-carto-eyebrow {
-      font-family: 'Be Vietnam Pro', sans-serif;
-      font-size: 0.55rem;
-      letter-spacing: 0.5em;
+    .mono { font-family: 'JetBrains Mono', ui-monospace, monospace; }
+    .label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 0.18em;
       text-transform: uppercase;
-      color: rgba(245,168,0,0.55);
-      margin-bottom: 0.9rem;
-      display: block;
-    }
-    .hero-carto-rule {
-      height: 1px;
-      background: linear-gradient(to right, transparent, rgba(245,168,0,0.45), transparent);
-      margin: 0.8rem 0;
-    }
-    .hero-carto-name {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0.6rem;
-      line-height: 1;
-      padding: 0.3rem 0;
-    }
-    .hero-carto-viet, .hero-carto-nam {
-      font-family: 'Italiana', serif;
-      font-size: clamp(3.8rem, 6vw, 6.4rem);
-      color: var(--cream);
-      letter-spacing: 0.12em;
-      line-height: 1;
-    }
-    .hero-carto-diamond {
-      color: var(--gold);
-      font-size: 0.7rem;
-      opacity: 0.75;
-      align-self: center;
-      margin-top: 0.2rem;
-    }
-    .hero-carto-footer {
-      font-family: 'Be Vietnam Pro', sans-serif;
-      font-size: 0.55rem;
-      letter-spacing: 0.4em;
-      text-transform: uppercase;
-      color: rgba(245,168,0,0.42);
-      display: block;
-      margin-top: 0.3rem;
-    }
-    .hero-dash-sub {
-      font-size: 0.86rem; line-height: 1.85;
-      color: rgba(253,246,227,0.48); margin-bottom: 1.8rem;
-      font-weight: 300; max-width: 32ch; text-align: center;
-    }
-    .hero-travellers { display: flex; flex-wrap: wrap; gap: 0.5rem; justify-content: center; }
-    .traveller-pill {
-      padding: 0.35rem 1rem; border: 1px solid rgba(245,168,0,0.35);
-      border-radius: 100px; font-size: 0.75rem; font-weight: 500;
-      color: var(--gold); background: rgba(245,168,0,0.07);
-    }
-    .hero-rule { height: 1px; background: rgba(245,168,0,0.16); margin: 1.8rem 0; }
-
-    /* COUNTDOWN */
-    .countdown-wrap { margin-bottom: 1.6rem; }
-    .countdown-label { font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase; opacity: 0.45; margin-bottom: 0.8rem; }
-    .countdown-boxes { display: flex; gap: 0.7rem; flex-wrap: wrap; justify-content: center; }
-    .countdown-box { text-align: center; background: rgba(245,168,0,0.07); border: 1px solid rgba(245,168,0,0.18); border-radius: 10px; padding: 0.7rem 1rem; min-width: 62px; }
-    .countdown-num { font-family: 'Playfair Display', serif; font-size: 1.75rem; font-weight: 900; color: var(--gold); display: block; line-height: 1; }
-    .countdown-unit { font-size: 0.58rem; letter-spacing: 0.15em; text-transform: uppercase; opacity: 0.5; margin-top: 0.3rem; display: block; }
-    .countdown-gone { font-family: 'Playfair Display', serif; font-size: 1.3rem; color: var(--gold); font-style: italic; }
-
-    .hero-stats { display: flex; gap: 2.5rem; flex-wrap: wrap; justify-content: center; }
-    .stat { text-align: center; }
-    .stat-num { font-family: 'Playfair Display', serif; font-size: 1.8rem; font-weight: 700; color: var(--gold); display: block; }
-    .stat-label { font-size: 0.65rem; letter-spacing: 0.15em; text-transform: uppercase; opacity: 0.55; }
-    .hero-coords {
-      position: absolute; bottom: 2.5rem; left: 50%; transform: translateX(-50%);
-      font-size: 0.58rem; letter-spacing: 0.2em; text-transform: uppercase;
-      color: rgba(245,168,0,0.22); font-weight: 300; white-space: nowrap;
+      font-weight: 500;
     }
 
-    /* RIGHT MAP PANEL */
-    .hero-right {
-      position: relative; overflow: hidden; min-height: 0;
-      background: url('img/vietnam_map.png') center center / contain no-repeat, var(--dark);
-    }
-    .hero-right-scrim {
-      position: absolute; inset: 0; z-index: 1; pointer-events: none;
-      background: linear-gradient(to right, rgba(26,16,8,0.6) 0%, rgba(26,16,8,0.18) 35%, transparent 65%);
-    }
-    .hero-right-grid {
-      position: absolute; inset: 0; z-index: 1; pointer-events: none;
-      background-image:
-        repeating-linear-gradient(0deg, transparent, transparent 79px, rgba(245,168,0,0.03) 80px),
-        repeating-linear-gradient(90deg, transparent, transparent 79px, rgba(245,168,0,0.02) 80px);
-    }
+    /* === APP SHELL ============================================== */
+    #app { min-height: 100vh; transition: background var(--t-theme); }
 
-    /* HERO CITY PINS */
-    .hero-pin {
-      position: absolute; z-index: 5; pointer-events: none;
-      width: 0; height: 0;
-    }
-    .hero-pin-dot {
-      position: absolute; width: 10px; height: 10px; border-radius: 50%;
-      background: var(--gold); transform: translate(-50%, -50%);
-      box-shadow: 0 0 10px 4px rgba(245,168,0,0.5);
-    }
-    .hero-pin-sm .hero-pin-dot {
-      width: 7px; height: 7px;
-      background: rgba(245,168,0,0.55);
-      box-shadow: 0 0 5px 2px rgba(245,168,0,0.25);
-    }
-    .hero-pin-ring {
-      position: absolute; border-radius: 50%;
-      border: 1.5px solid rgba(245,168,0,0.55);
-      width: 26px; height: 26px;
-      transform: translate(-50%, -50%);
-      animation: halo-pulse 2.4s ease-out infinite;
-    }
-    .hero-pin-ring2 {
-      width: 46px; height: 46px;
-      border-color: rgba(245,168,0,0.28);
-      animation-delay: 0.8s;
-    }
-    .hero-pin-tag {
-      position: absolute; left: 14px; top: -18px;
-      background: rgba(14,8,3,0.9); border: 1px solid rgba(245,168,0,0.3);
-      border-radius: 6px; padding: 0.28rem 0.7rem;
-      backdrop-filter: blur(10px); white-space: nowrap;
-    }
-    .hero-pin-tag.tag-left { left: auto; right: 14px; }
-    .hero-pin-tag-name {
-      font-size: 0.6rem; font-weight: 700; color: var(--gold);
-      display: block; letter-spacing: 0.08em; text-transform: uppercase;
-    }
-    .hero-pin-tag-dates {
-      font-size: 0.54rem; color: rgba(253,246,227,0.5);
-      display: block; margin-top: 0.1rem;
-    }
+    /* Fade-in on load */
+    .boot { opacity: 0; transform: translateY(8px); }
+    .boot.ready { opacity: 1; transform: none; transition: opacity 700ms ease, transform 700ms cubic-bezier(.2,.7,.2,1); }
 
-    /* CINEMATIC IMAGE BAND — horizontal drag scroll */
-    .img-band {
-      width: 100%; height: 320px;
-      display: flex; overflow-x: auto; overflow-y: hidden;
-      scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch;
-      gap: 3px; cursor: grab; scrollbar-width: none; position: relative;
-    }
-    .img-band::-webkit-scrollbar { display: none; }
-    .img-band.is-dragging { cursor: grabbing; user-select: none; }
-    .img-band-item {
-      flex: 0 0 auto; width: clamp(200px, 35vw, 480px);
-      scroll-snap-align: start; overflow: hidden; position: relative;
-    }
-    .img-band-item:first-child { width: clamp(260px, 45vw, 640px); }
-    .img-band-item img {
-      width: 100%; height: 100%; object-fit: cover;
-      filter: brightness(0.72) saturate(1.15);
-      transition: filter 0.6s, transform 0.6s;
-    }
-    .img-band-item:hover img { filter: brightness(0.95) saturate(1.3); transform: scale(1.04); }
-    .img-band-label {
-      position: absolute; bottom: 1rem; left: 1rem;
-      font-size: 0.65rem; letter-spacing: 0.15em; text-transform: uppercase;
-      color: rgba(255,255,255,0.7); font-weight: 500;
-      text-shadow: 0 1px 4px rgba(0,0,0,0.5);
-    }
+    /* === REVEAL =================================================== */
+    .reveal { opacity: 0; transform: translateY(28px); transition: opacity 700ms ease, transform 800ms cubic-bezier(.2,.7,.2,1); }
+    .reveal.in { opacity: 1; transform: none; }
+    .reveal-img { transform: scale(0.92); transition: transform 1100ms cubic-bezier(.2,.7,.2,1), opacity 700ms ease; opacity: 0; }
+    .reveal-img.in { transform: scale(1); opacity: 1; }
 
-    /* SECTION PHOTO ACCENTS */
-    .section-photo-row {
-      display: grid; grid-template-columns: 1fr 1fr; gap: 8px;
-      margin: 2.5rem 0; border-radius: 16px; overflow: hidden; height: 220px;
-    }
-    .section-photo-row.three { grid-template-columns: 1fr 1fr 1fr; }
-    .section-photo-row img {
-      width: 100%; height: 112%; object-fit: cover;
-      filter: brightness(0.75) saturate(1.1);
-      transition: filter 0.3s, transform 0.05s linear;
-      will-change: transform; transform: scale(1.12) translateY(0);
-    }
-    .section-photo-row img:hover { filter: brightness(0.95) saturate(1.25); }
-
-    .section-photo-single {
-      width: 100%; height: 200px; border-radius: 14px; overflow: hidden; margin: 2rem 0;
-    }
-    .section-photo-single img {
-      width: 100%; height: 112%; object-fit: cover; object-position: center 60%;
-      filter: brightness(0.72) saturate(1.1);
-      transition: transform 0.05s linear;
-      will-change: transform; transform: scale(1.12) translateY(0);
-    }
-
-    @media (max-width: 600px) {
-      .img-band { height: 220px; }
-      .section-photo-row { height: 160px; }
-    }
-
-    /* 3D CARD TILT — desktop only */
-    @media (hover: hover) {
-      .flight-card, .hotel-card {
-        transition: transform 0.18s ease, border-color 0.3s, box-shadow 0.3s;
-        transform-style: preserve-3d;
-      }
-    }
-
-    /* LOADER SPLASH */
-    #loader {
-      position: fixed; inset: 0; z-index: 9999;
-      background: var(--dark);
-      display: flex; align-items: center; justify-content: center;
-      opacity: 1;
-      transition: opacity 0.65s cubic-bezier(0.4,0,0.2,1);
-      pointer-events: auto;
-    }
-    #loader.fade-out { opacity: 0; pointer-events: none; }
-    .loader-inner { text-align: center; }
-    .loader-eyebrow {
-      font-family: 'Be Vietnam Pro', sans-serif;
-      font-size: 0.52rem; letter-spacing: 0.5em; text-transform: uppercase;
-      color: rgba(245,168,0,0.5); margin-bottom: 1.4rem; display: block;
-    }
-    .loader-name {
-      font-family: 'Italiana', serif;
-      font-size: clamp(4rem, 10vw, 7rem);
-      color: var(--cream); letter-spacing: 0.12em; line-height: 1;
-      display: flex; align-items: center; justify-content: center; gap: 0.8rem;
-    }
-    .loader-diamond { color: var(--gold); font-size: 0.9rem; opacity: 0.75; align-self: center; }
-    .loader-bar {
-      width: 200px; height: 2px; background: rgba(245,168,0,0.12);
-      margin: 2rem auto 1.4rem; border-radius: 2px; overflow: hidden;
-    }
-    .loader-bar-fill {
-      height: 100%; width: 0; background: linear-gradient(90deg, var(--red), var(--gold));
-      border-radius: 2px;
-      animation: loader-progress 1.1s cubic-bezier(0.4,0,0.2,1) forwards;
-    }
-    @keyframes loader-progress { 0% { width: 0; } 100% { width: 100%; } }
-    .loader-footer {
-      font-family: 'Be Vietnam Pro', sans-serif;
-      font-size: 0.5rem; letter-spacing: 0.38em; text-transform: uppercase;
-      color: rgba(245,168,0,0.25);
-    }
-
-    /* FILM GRAIN */
-    body::after {
-      content: ''; position: fixed; inset: 0;
-      pointer-events: none; z-index: 9800;
-      opacity: 0.032;
-      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-      background-size: 140px 140px;
-      animation: grain 0.4s steps(1) infinite;
-    }
-    @keyframes grain {
-      0%,100% { transform: translate(0,0); }
-      10% { transform: translate(-2%,-3%); }
-      20% { transform: translate(3%,1%); }
-      30% { transform: translate(-1%,2%); }
-      40% { transform: translate(2%,-1%); }
-      50% { transform: translate(-3%,3%); }
-      60% { transform: translate(1%,-2%); }
-      70% { transform: translate(-2%,2%); }
-      80% { transform: translate(3%,-3%); }
-      90% { transform: translate(-1%,1%); }
-    }
-
-    /* REDUCED MOTION */
-    @media (prefers-reduced-motion: reduce) {
-      *, *::before, *::after {
-        animation-duration: 0.01ms !important;
-        transition-duration: 0.01ms !important;
-        animation-iteration-count: 1 !important;
-      }
-      body::after { display: none; }
-      [data-reveal] { opacity: 1 !important; transform: none !important; }
-    }
-
-    /* SECTIONS */
-    section { padding: 6rem 2rem; max-width: 1100px; margin: 0 auto; }
-    .section-eyebrow { font-size: 0.7rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--gold); margin-bottom: 0.8rem; font-weight: 600; }
-    .section-title { font-family: 'Playfair Display', serif; font-size: clamp(2rem, 4vw, 3rem); font-weight: 700; line-height: 1.2; }
-    .section-intro { font-size: 0.9rem; line-height: 1.8; opacity: 0.74; margin-top: 0.8rem; max-width: 680px; }
-    .section-divider { width: 60px; height: 3px; background: linear-gradient(90deg, var(--red), var(--gold)); margin: 1.5rem 0 2.5rem; border-radius: 2px; }
-
-    /* FLIGHTS */
-    #overview { border-top: 1px solid rgba(255,255,255,0.06); }
-    .flights-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; margin-top: 2rem; }
-    .flight-card { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1); border-radius: 16px; padding: 1.8rem; position: relative; overflow: hidden; transition: transform 0.3s, border-color 0.3s, box-shadow 0.3s; }
-    .flight-card:hover { transform: translateY(-5px); border-color: rgba(245,168,0,0.4); box-shadow: 0 12px 40px rgba(0,0,0,0.3); }
-    .flight-card::before { content: '✈'; position: absolute; top: -10px; right: 1rem; font-size: 5rem; opacity: 0.04; }
-    .flight-route { display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem; }
-    .flight-city { font-family: 'Playfair Display', serif; font-size: 1rem; font-weight: 700; }
-    .flight-code { font-size: 0.7rem; opacity: 0.5; letter-spacing: 0.1em; }
-    .flight-arrow { color: var(--gold); font-size: 1.2rem; flex: 1; text-align: center; }
-    .flight-meta { font-size: 0.82rem; opacity: 0.72; line-height: 1.9; }
-    .flight-date { color: var(--gold); font-weight: 600; font-size: 0.9rem; margin-bottom: 0.5rem; display: block; }
-    .flight-badge { display: inline-block; padding: 0.2rem 0.7rem; background: rgba(200,16,46,0.2); border: 1px solid rgba(200,16,46,0.4); border-radius: 100px; font-size: 0.68rem; color: #ff6b7a; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 1rem; }
-    .tz-note { margin-top: 0.8rem; padding: 0.5rem 0.9rem; background: rgba(245,168,0,0.08); border-left: 3px solid var(--gold); border-radius: 0 6px 6px 0; font-size: 0.77rem; color: rgba(245,168,0,0.9); line-height: 1.5; }
-
-    /* ITINERARY */
-    #itinerary { border-top: 1px solid rgba(255,255,255,0.06); }
-    .city-block { margin-bottom: 4rem; }
-    .city-header { display: flex; align-items: center; gap: 1.5rem; margin-bottom: 2rem; padding-bottom: 1rem; border-bottom: 1px solid rgba(255,255,255,0.08); }
-    .city-icon { width: 56px; height: 56px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; flex-shrink: 0; }
-    .city-icon.saigon { background: rgba(200,16,46,0.2); border: 1px solid rgba(200,16,46,0.4); }
-    .city-icon.hanoi  { background: rgba(27,108,168,0.2); border: 1px solid rgba(27,108,168,0.4); }
-    .city-name { font-family: 'Playfair Display', serif; font-size: 1.8rem; font-weight: 700; }
-    .city-dates { font-size: 0.8rem; opacity: 0.5; margin-top: 0.2rem; }
-    .days-list { display: flex; flex-direction: column; gap: 1rem; }
-    .day-card { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.07); border-radius: 14px; overflow: hidden; transition: border-color 0.2s; }
-    .day-card:hover { border-color: rgba(245,168,0,0.25); }
-    .day-header { display: flex; align-items: center; gap: 1.2rem; padding: 1.2rem 1.5rem; cursor: pointer; user-select: none; }
-    .day-num { font-family: 'Playfair Display', serif; font-size: 1rem; font-weight: 900; color: var(--gold); opacity: 0.4; min-width: 3.8rem; letter-spacing: 0.01em; }
-    .day-info { flex: 1; }
-    .day-title { font-weight: 600; font-size: 0.95rem; margin-bottom: 0.2rem; }
-    .day-date { font-size: 0.75rem; opacity: 0.45; }
-    .day-tags { display: flex; gap: 0.4rem; flex-wrap: wrap; margin-top: 0.4rem; }
-    .tag { font-size: 0.65rem; padding: 0.15rem 0.6rem; border-radius: 100px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; }
-    .tag-culture  { background: rgba(200,16,46,0.15);  color: #ff8090; border: 1px solid rgba(200,16,46,0.25); }
-    .tag-food     { background: rgba(245,168,0,0.12);  color: var(--gold); border: 1px solid rgba(245,168,0,0.25); }
-    .tag-nature   { background: rgba(45,106,79,0.2);   color: #6fcf97; border: 1px solid rgba(45,106,79,0.3); }
-    .tag-travel   { background: rgba(27,108,168,0.15); color: #7ec8e3; border: 1px solid rgba(27,108,168,0.3); }
-    .tag-shopping { background: rgba(123,63,0,0.2);    color: #f0a070; border: 1px solid rgba(123,63,0,0.3); }
-    .tag-relax    { background: rgba(100,100,120,0.2); color: #c0c0d0; border: 1px solid rgba(100,100,120,0.3); }
-    .day-chevron { font-size: 0.7rem; opacity: 0.4; transition: transform 0.3s; }
-    .day-card.open .day-chevron { transform: rotate(180deg); }
-    .day-body { max-height: 0; overflow: hidden; transition: max-height 0.45s ease; }
-    .day-card.open .day-body { max-height: 900px; }
-    .day-content { padding: 1.2rem 1.5rem 1.5rem; border-top: 1px solid rgba(255,255,255,0.06); }
-    .activity-list { list-style: none; display: flex; flex-direction: column; gap: 0.7rem; }
-    .activity-list li { display: flex; gap: 0.8rem; font-size: 0.86rem; line-height: 1.6; opacity: 0.82; }
-    .activity-list li::before { content: '→'; color: var(--gold); flex-shrink: 0; margin-top: 0.1rem; }
-    .travel-note { margin-top: 1rem; padding: 0.7rem 1rem; background: rgba(27,108,168,0.12); border-left: 3px solid var(--teal); border-radius: 0 8px 8px 0; font-size: 0.8rem; opacity: 0.88; line-height: 1.6; }
-    .travel-note strong { color: #7ec8e3; }
-    .tip-note { margin-top: 0.8rem; padding: 0.7rem 1rem; background: rgba(245,168,0,0.08); border-left: 3px solid var(--gold); border-radius: 0 8px 8px 0; font-size: 0.8rem; opacity: 0.88; line-height: 1.6; }
-    .tip-note strong { color: var(--gold); }
-
-    @keyframes halo-pulse {
-      0%   { transform: translate(-50%,-50%) scale(1);   opacity: 0.85; }
-      100% { transform: translate(-50%,-50%) scale(2.2); opacity: 0;    }
-    }
-
-    /* MAPS */
-    #maps { border-top: 1px solid rgba(255,255,255,0.06); }
-    .route-map-wrap {
-      margin: 2rem 0 3rem;
-      border-radius: 16px; overflow: hidden;
-      border: 1px solid rgba(245,168,0,0.18);
-      box-shadow: 0 8px 48px rgba(0,0,0,0.5);
-    }
-    .route-map-wrap img { width: 100%; display: block; }
-    .map-features { display: flex; flex-direction: column; gap: 2rem; }
-    .map-feature {
-      border-radius: 20px; overflow: hidden;
-      border: 1px solid rgba(255,255,255,0.08);
-      background: rgba(255,255,255,0.02);
-    }
-    .map-feature-header {
-      display: flex; align-items: center; gap: 1.2rem;
-      padding: 1.5rem 2rem;
-      background: rgba(255,255,255,0.03);
-      border-bottom: 1px solid rgba(255,255,255,0.07);
-    }
-    .map-feature-city {
-      font-family: 'Playfair Display', serif; font-size: 1.4rem; font-weight: 700;
-    }
-    .map-feature-dates { font-size: 0.78rem; opacity: 0.5; margin-top: 0.2rem; }
-    .map-pins {
-      display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 0; border-top: 1px solid rgba(255,255,255,0.07);
-    }
-    .map-pin {
-      display: flex; align-items: flex-start; gap: 0.8rem;
-      padding: 1.1rem 1.5rem;
-      border-right: 1px solid rgba(255,255,255,0.07);
-      font-size: 0.82rem; line-height: 1.5;
-      transition: background 0.2s;
-    }
-    .map-pin:last-child { border-right: none; }
-    .map-pin:hover { background: rgba(245,168,0,0.05); }
-    .map-pin-icon { font-size: 1rem; flex-shrink: 0; margin-top: 0.1rem; }
-    .map-pin-label { font-weight: 600; display: block; margin-bottom: 0.15rem; }
-    .map-pin-sub { font-size: 0.75rem; opacity: 0.5; }
-
-    /* HOTELS */
-    #hotels { border-top: 1px solid rgba(255,255,255,0.06); }
-    .hotels-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; margin-top: 2rem; }
-    .hotel-card { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1); border-radius: 16px; overflow: hidden; transition: transform 0.3s, border-color 0.3s, box-shadow 0.3s; }
-    .hotel-card:hover { transform: translateY(-5px); border-color: rgba(245,168,0,0.3); box-shadow: 0 12px 40px rgba(0,0,0,0.3); }
-    .hotel-img { width: 100%; height: 180px; object-fit: cover; filter: brightness(0.78) saturate(1.1); display: block; }
-    .hotel-body { padding: 1.5rem; }
-    .hotel-status { display: inline-block; padding: 0.2rem 0.8rem; border-radius: 100px; font-size: 0.65rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 1rem; }
-    .status-booked { background: rgba(45,106,79,0.25); color: #6fcf97; border: 1px solid rgba(45,106,79,0.4); }
-    .status-needed { background: rgba(200,16,46,0.15); color: #ff8090; border: 1px solid rgba(200,16,46,0.3); }
-    .hotel-city { font-size: 0.7rem; letter-spacing: 0.2em; text-transform: uppercase; opacity: 0.5; margin-bottom: 0.4rem; }
-    .hotel-name { font-family: 'Playfair Display', serif; font-size: 1.3rem; font-weight: 700; margin-bottom: 0.4rem; }
-    .hotel-address { font-size: 0.8rem; opacity: 0.5; margin-bottom: 1rem; line-height: 1.5; }
-    .hotel-dates { font-size: 0.82rem; color: var(--gold); font-weight: 500; margin-bottom: 0.8rem; }
-    .hotel-features { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 1rem; }
-    .hotel-feat { font-size: 0.7rem; padding: 0.2rem 0.7rem; background: rgba(255,255,255,0.06); border-radius: 100px; color: rgba(255,255,255,0.6); }
-    .hotel-note { padding: 0.8rem; background: rgba(245,168,0,0.06); border: 1px solid rgba(245,168,0,0.15); border-radius: 10px; font-size: 0.8rem; line-height: 1.6; opacity: 0.85; }
-    .hotel-note strong { color: var(--gold); }
-
-    /* NAV CLOCK */
-    .nav-clock {
-      display: flex; align-items: center; gap: 0.55rem;
-      color: rgba(253,246,227,0.42); white-space: nowrap;
-    }
-    .nav-clock-city { display: flex; flex-direction: column; align-items: center; }
-    .nav-clock-label { font-size: 0.48rem; letter-spacing: 0.18em; text-transform: uppercase; color: rgba(245,168,0,0.5); line-height: 1; margin-bottom: 0.15rem; }
-    .nav-clock-time { font-size: 0.68rem; font-variant-numeric: tabular-nums; letter-spacing: 0.04em; line-height: 1; }
-    .nav-clock-sep { font-size: 0.5rem; opacity: 0.3; align-self: center; }
-
-    /* PHRASES SECTION */
-    .phrases-grid {
-      display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-      gap: 0.85rem; margin-top: 2rem;
-    }
-    .phrase-card {
-      background: rgba(255,255,255,0.03); border: 1px solid rgba(245,168,0,0.12);
-      border-radius: 14px; padding: 1.1rem 1.2rem;
-      transition: border-color 0.2s, background 0.2s;
-      cursor: default;
-    }
-    .phrase-card:hover { border-color: rgba(245,168,0,0.3); background: rgba(245,168,0,0.05); }
-    .phrase-viet { font-family: 'Playfair Display', serif; font-size: 1.15rem; font-weight: 700; color: var(--cream); margin-bottom: 0.2rem; }
-    .phrase-phon { font-size: 0.68rem; color: rgba(245,168,0,0.65); letter-spacing: 0.04em; font-style: italic; margin-bottom: 0.5rem; }
-    .phrase-eng { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.12em; color: rgba(253,246,227,0.38); }
-    .phrase-note { font-size: 0.65rem; color: rgba(253,246,227,0.3); margin-top: 0.4rem; font-style: italic; }
-
-    /* FOOTER */
-    footer { text-align: center; padding: 3rem 2rem; border-top: 1px solid rgba(255,255,255,0.06); font-size: 0.78rem; opacity: 0.35; }
-
-    /* RESPONSIVE */
-    @media (max-width: 780px) {
-      nav { padding: 0.8rem 1rem; }
-      .nav-links { gap: 0.8rem; }
-      .nav-links a { font-size: 0.68rem; }
-      .hero-dashboard { grid-template-columns: 1fr; height: auto; min-height: 100dvh; }
-      .hero-left { padding: 5rem 1.5rem 2rem; border-right: none; border-bottom: 1px solid rgba(245,168,0,0.15); }
-      .hero-right { height: 60vw; min-height: 240px; }
-      .hero-coords { display: none; }
-      .map-pins { grid-template-columns: 1fr 1fr; }
-      .map-pin { border-right: none; border-bottom: 1px solid rgba(255,255,255,0.07); }
-      .map-pin:last-child { border-bottom: none; }
-      .phrases-grid { grid-template-columns: repeat(2, 1fr); }
-    }
-    @media (max-width: 500px) {
-      .mel-only { display: none; }
-      .nav-links a { font-size: 0.62rem; letter-spacing: 0.04em; }
-      .nav-links { gap: 0.6rem; }
-      .act-chip { font-size: 0.68rem; padding: 0.5rem 0.8rem; min-height: 44px; }
-      .act-close { width: 44px; height: 44px; font-size: 1rem; }
-      .hero-carto-viet, .hero-carto-nam { font-size: clamp(3rem, 12vw, 5rem); }
-      .countdown-boxes { gap: 0.5rem; }
-      .countdown-box { padding: 0.6rem 0.7rem; min-width: 54px; }
-      .phrases-grid { grid-template-columns: 1fr 1fr; gap: 0.6rem; }
-    }
-
-    ::-webkit-scrollbar { width: 6px; }
-    ::-webkit-scrollbar-track { background: var(--dark); }
-    ::-webkit-scrollbar-thumb { background: rgba(245,168,0,0.3); border-radius: 3px; }
-    /* ACTIVITY CHIPS (inside day cards) */
-    .act-chips { display: flex; flex-wrap: wrap; gap: 0.5rem; padding: 1rem 1.5rem 1.4rem; border-top: 1px solid rgba(255,255,255,0.06); margin-top: 0.8rem; }
-    .act-chip {
-      display: inline-flex; align-items: center; gap: 0.4rem;
-      padding: 0.42rem 0.9rem; border-radius: 100px;
-      border: 1px solid rgba(245,168,0,0.3); background: rgba(245,168,0,0.06);
-      color: var(--gold); font-size: 0.72rem; font-weight: 500; font-family: 'Be Vietnam Pro', sans-serif;
-      cursor: pointer; transition: background 0.2s, border-color 0.2s;
-    }
-    .act-chip:hover { background: rgba(245,168,0,0.16); border-color: rgba(245,168,0,0.7); }
-    .act-chip-arrow { font-size: 0.6rem; opacity: 0.55; margin-left: 0.1rem; }
-
-    /* ACTIVITY MODAL */
-    .act-overlay {
-      position: fixed; inset: 0; z-index: 2000;
-      background: rgba(0,0,0,0.72); backdrop-filter: blur(6px);
-      opacity: 0; pointer-events: none; transition: opacity 0.3s;
-      display: flex; align-items: flex-end; justify-content: center;
-    }
-    .act-overlay.open { opacity: 1; pointer-events: auto; }
-    .act-panel {
-      width: min(100%, 560px); max-height: 90vh;
-      border-radius: 24px 24px 0 0;
-      background: #1c110a; overflow-y: auto;
-      transform: translateY(100%);
-      transition: transform 0.42s cubic-bezier(0.32,0.72,0,1);
+    /* === HERO ==================================================== */
+    .hero {
       position: relative;
+      min-height: 100svh;
+      overflow: hidden;
+      isolation: isolate;
+      color: #fff;
+      background: #0b1814;
     }
-    .act-overlay.open .act-panel { transform: translateY(0); }
-    .act-panel-photo { width: 100%; height: 220px; object-fit: cover; display: block; filter: brightness(0.75) saturate(1.1); border-radius: 24px 24px 0 0; }
-    .act-panel-body { padding: 1.6rem 1.8rem 2.5rem; }
-    .act-panel-tags { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 0.9rem; }
-    .act-panel-tag { font-size: 0.58rem; letter-spacing: 0.12em; text-transform: uppercase; padding: 0.22rem 0.65rem; border-radius: 100px; background: rgba(245,168,0,0.1); color: var(--gold); border: 1px solid rgba(245,168,0,0.25); }
-    .act-panel-title { font-family: 'Playfair Display', serif; font-size: 1.75rem; font-weight: 700; margin-bottom: 0.25rem; line-height: 1.2; }
-    .act-panel-meta { font-size: 0.7rem; color: rgba(253,246,227,0.4); letter-spacing: 0.06em; margin-bottom: 1.2rem; }
-    .act-panel-desc { font-size: 0.86rem; line-height: 1.85; color: rgba(253,246,227,0.72); margin-bottom: 1.4rem; }
-    .act-panel-h { font-size: 0.58rem; letter-spacing: 0.28em; text-transform: uppercase; color: var(--gold); opacity: 0.55; margin-bottom: 0.75rem; }
-    .act-panel ul { list-style: none; padding: 0; margin: 0 0 1.4rem; }
-    .act-panel ul li { padding: 0.55rem 0 0.55rem 1.1rem; border-bottom: 1px solid rgba(255,255,255,0.05); font-size: 0.83rem; line-height: 1.75; color: rgba(253,246,227,0.68); position: relative; }
-    .act-panel ul li::before { content: '—'; position: absolute; left: 0; color: var(--gold); opacity: 0.45; }
-    .act-panel ul li:last-child { border-bottom: none; }
-    .act-panel-tip { background: rgba(245,168,0,0.07); border-left: 2px solid rgba(245,168,0,0.6); border-radius: 0 8px 8px 0; padding: 0.9rem 1.1rem; font-size: 0.81rem; line-height: 1.75; color: rgba(253,246,227,0.62); }
-    .act-close {
-      position: absolute; top: 0.9rem; right: 0.9rem; z-index: 10;
-      width: 34px; height: 34px; border-radius: 50%;
-      background: rgba(0,0,0,0.55); border: 1px solid rgba(255,255,255,0.15);
-      color: rgba(255,255,255,0.75); font-size: 0.9rem; cursor: pointer;
-      display: flex; align-items: center; justify-content: center;
+    .hero-bg {
+      position: absolute; inset: -10% 0 -10% 0;
+      will-change: transform;
+      z-index: 0;
     }
-    .act-not-booked { font-size: 0.68rem; color: rgba(200,16,46,0.75); letter-spacing: 0.06em; margin-bottom: 1.2rem; font-style: italic; }
+    .hero-bg::before {
+      content: ""; position: absolute; inset: 0;
+      background: linear-gradient(180deg, rgba(11,24,20,0.40) 0%, rgba(11,24,20,0.20) 30%, rgba(11,24,20,0.55) 70%, rgba(11,24,20,0.95) 100%);
+      z-index: 1;
+    }
+    .hero-bg img {
+      width: 100%; height: 100%; object-fit: cover;
+      filter: saturate(1.05) contrast(1.05);
+    }
+    .hero-noise {
+      position: absolute; inset: 0; z-index: 2; pointer-events: none;
+      mix-blend-mode: overlay; opacity: 0.18;
+      background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.5 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+    }
+    .hero-content {
+      position: relative; z-index: 3;
+      display: flex; flex-direction: column; justify-content: space-between;
+      min-height: 100svh;
+      gap: 28px;
+      padding: max(env(safe-area-inset-top), 18px) 20px 28px 20px;
+    }
+    @media (min-width: 720px) {
+      .hero-content { padding: max(env(safe-area-inset-top), 28px) 40px 40px 40px; }
+    }
+    .hero-top {
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 12px;
+    }
+    .hero-mark {
+      display: flex; align-items: center; gap: 10px;
+      font-weight: 700;
+    }
+    .hero-mark .dot { width: 8px; height: 8px; border-radius: 999px; background: var(--lantern); box-shadow: 0 0 18px var(--lantern); animation: pulse 2.4s ease-in-out infinite; }
+    @keyframes pulse { 0%,100% { opacity: 1 } 50% { opacity: 0.5 } }
+    .hero-clocks { display: flex; align-items: center; gap: 14px; font-variant-numeric: tabular-nums; }
+    .hero-clock { display: flex; flex-direction: column; align-items: flex-end; }
+    .hero-clock b { font-family: 'JetBrains Mono', monospace; font-weight: 500; font-size: 13px; }
+    .hero-clock span { font-size: 9px; letter-spacing: 0.18em; opacity: 0.75; }
 
-    /* SCROLL TO TOP BUTTON */
-    #scroll-top {
-      position: fixed; bottom: 2rem; right: 2rem; z-index: 998;
-      width: 44px; height: 44px; border-radius: 50%;
-      background: rgba(26,16,8,0.9); border: 1px solid rgba(245,168,0,0.4);
-      color: var(--gold); font-size: 1.1rem; cursor: pointer;
-      display: flex; align-items: center; justify-content: center;
-      opacity: 0; pointer-events: none;
-      transition: opacity 0.3s, transform 0.3s, border-color 0.2s;
-      backdrop-filter: blur(8px);
+    .hero-title {
+      font-size: clamp(86px, 17vw, 200px);
+      line-height: 0.84;
+      letter-spacing: -0.045em;
+      font-weight: 800;
     }
-    #scroll-top.visible { opacity: 1; pointer-events: auto; }
-    #scroll-top:hover { border-color: var(--gold); transform: translateY(-3px); }
+    .hero-title em {
+      font-style: normal;
+      color: var(--lantern);
+    }
+    .hero-meta {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 22px;
+    }
+    @media (min-width: 720px) { .hero-meta { grid-template-columns: 1.4fr 1fr; align-items: end; } }
+    .hero-tag { font-size: 16px; line-height: 1.55; font-weight: 500; color: #fff; opacity: 0.95; max-width: 460px; text-shadow: 0 1px 12px rgba(0,0,0,0.35); }
+    @media (min-width: 720px) { .hero-tag { font-size: 17px; } }
+    .hero-tag-group { display: flex; flex-direction: column; gap: 18px; max-width: 520px; }
+    .hero-names {
+      font-family: 'Bricolage Grotesque', sans-serif;
+      font-weight: 800;
+      font-size: clamp(26px, 4.6vw, 40px);
+      letter-spacing: -0.025em;
+      line-height: 1.05;
+      color: var(--lantern);
+      text-wrap: balance;
+      text-shadow: 0 1px 18px rgba(0,0,0,0.35);
+    }
+
+    /* Countdown */
+    .countdown { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: rgba(255,255,255,0.16); border: 1px solid rgba(255,255,255,0.18); }
+    .countdown div { padding: 12px 10px; background: rgba(11,24,20,0.45); backdrop-filter: blur(6px); }
+    .countdown b { font-family: 'Bricolage Grotesque', sans-serif; font-weight: 800; font-size: clamp(28px, 7vw, 44px); letter-spacing: -0.04em; line-height: 1; display: block; font-variant-numeric: tabular-nums; }
+    .countdown span { font-size: 10px; letter-spacing: 0.18em; opacity: 0.75; text-transform: uppercase; display: block; margin-top: 6px; }
+
+    .scroll-hint { display: flex; align-items: center; gap: 10px; font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; opacity: 0.75; }
+    .scroll-hint::after { content: ""; width: 24px; height: 1px; background: currentColor; animation: slide 1.8s ease-in-out infinite; }
+    @keyframes slide { 0%,100% { transform: translateX(0); opacity: 1 } 50% { transform: translateX(8px); opacity: 0.4 } }
+
+    /* === DASHBOARD ============================================== */
+    .dashboard {
+      position: relative;
+      z-index: 4;
+      margin: -60px 14px 0 14px;
+      background: var(--card); color: var(--card-fg);
+      border: 1px solid var(--rule);
+      box-shadow: 0 28px 60px -28px oklch(0.18 0.03 200 / 0.35);
+      transition: background var(--t-theme), color var(--t-theme), border-color var(--t-theme);
+    }
+    @media (min-width: 720px) {
+      .dashboard { margin: -80px auto 0 auto; max-width: 1200px; }
+    }
+    .dashboard-inner {
+      display: grid;
+      grid-template-columns: 1fr;
+    }
+    @media (min-width: 720px) { .dashboard-inner { grid-template-columns: 1.3fr 1fr; } }
+
+    .dash-weather, .dash-fx { padding: 18px 18px 20px; }
+    .dash-weather { border-bottom: 1px solid var(--rule); }
+    @media (min-width: 720px) {
+      .dash-weather { border-bottom: 0; border-right: 1px solid var(--rule); }
+    }
+    .dash-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 10px; }
+    .dash-head .label { color: var(--fg-muted); }
+    .city-select {
+      display: flex; gap: 4px; padding: 3px;
+      background: var(--bg-2);
+      border-radius: 999px;
+    }
+    .city-select button {
+      font-family: 'JetBrains Mono', monospace; font-size: 10px;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      padding: 6px 10px; border-radius: 999px;
+      color: var(--fg-muted); transition: all 200ms;
+    }
+    .city-select button.on { background: var(--accent); color: #fff; }
+
+    .weather-now {
+      display: grid; grid-template-columns: auto 1fr auto; gap: 14px; align-items: center;
+    }
+    .weather-icon {
+      width: 56px; height: 56px;
+      display: grid; place-items: center;
+      background: var(--bg-2);
+      color: var(--accent);
+      border-radius: 0;
+    }
+    .weather-temp { font-family: 'Bricolage Grotesque', sans-serif; font-weight: 800; font-size: 56px; letter-spacing: -0.045em; line-height: 0.9; font-variant-numeric: tabular-nums; }
+    .weather-temp sup { font-size: 18px; vertical-align: top; margin-left: 2px; opacity: 0.7; }
+    .weather-cond { font-size: 13px; color: var(--fg-muted); margin-top: 2px; }
+    .weather-side { text-align: right; display: flex; flex-direction: column; gap: 8px; }
+    .weather-pill { font-family: 'JetBrains Mono', monospace; font-size: 11px; padding: 4px 8px; border: 1px solid var(--rule); }
+
+    .fx-row {
+      display: grid; grid-template-columns: 1fr auto 1fr; gap: 8px; align-items: stretch;
+    }
+    .fx-side { display: flex; flex-direction: column; gap: 6px; padding: 6px 0; }
+    .fx-label { font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--fg-muted); }
+    .fx-input {
+      display: flex; align-items: baseline; gap: 6px;
+      font-family: 'Bricolage Grotesque', sans-serif; font-weight: 800;
+      font-size: 32px; letter-spacing: -0.03em; line-height: 1;
+    }
+    .fx-input input {
+      font: inherit; color: inherit; background: transparent; border: 0; padding: 0;
+      width: 100%; min-width: 0; outline: none;
+      font-variant-numeric: tabular-nums;
+    }
+    .fx-input input:focus { color: var(--accent); }
+    .fx-out { font-variant-numeric: tabular-nums; }
+    .fx-currency { font-size: 14px; color: var(--fg-muted); }
+    .fx-swap-wrap {
+      align-self: center;
+      display: flex; flex-direction: column; align-items: center; gap: 4px;
+    }
+    .fx-swap {
+      width: 36px; height: 36px;
+      display: grid; place-items: center;
+      border: 1px solid var(--accent);
+      color: var(--accent);
+      transition: background 180ms, color 180ms, transform 280ms;
+    }
+    .fx-swap:hover { background: var(--accent); color: #fff; }
+    .fx-swap:active { transform: rotate(180deg); }
+    .fx-swap-hint {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 9px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--accent);
+    }
+    .fx-quick { display: flex; gap: 6px; margin-top: 10px; flex-wrap: wrap; }
+    .fx-quick button {
+      font-family: 'JetBrains Mono', monospace; font-size: 11px;
+      padding: 4px 8px; border: 1px solid var(--rule);
+      transition: background 150ms, color 150ms;
+    }
+    .fx-quick button:hover, .fx-quick button.on { background: var(--fg); color: var(--bg); }
+
+    /* === STICKY DAY BAR ========================================= */
+    .daybar {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: var(--bg);
+      border-bottom: 1px solid var(--rule);
+      transition: background var(--t-theme), border-color var(--t-theme), color var(--t-theme), box-shadow 300ms;
+    }
+    .daybar.lifted { box-shadow: 0 14px 30px -22px rgba(0,0,0,0.45); }
+    .daybar-inner { display: flex; align-items: stretch; min-width: 0; }
+    .daybar-scroll {
+      display: flex; gap: 6px;
+      overflow-x: auto;
+      padding: 10px 16px;
+      flex: 1 1 auto; min-width: 0;
+      scroll-snap-type: x mandatory;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+    }
+    .daybar-scroll::-webkit-scrollbar { display: none; }
+    .daybar-chip {
+      scroll-snap-align: start;
+      flex: 0 0 auto;
+      display: flex; flex-direction: column; align-items: flex-start;
+      padding: 7px 12px;
+      border: 1px solid var(--rule);
+      background: transparent;
+      color: var(--fg);
+      min-width: 78px;
+      transition: all 220ms;
+      text-align: left;
+    }
+    .daybar-chip b { font-family: 'Bricolage Grotesque', sans-serif; font-weight: 800; font-size: 18px; line-height: 1; letter-spacing: -0.03em; }
+    .daybar-chip span { font-family: 'JetBrains Mono', monospace; font-size: 9.5px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--fg-muted); margin-top: 4px; }
+    .daybar-chip.on { background: var(--fg); color: var(--bg); border-color: var(--fg); }
+    .daybar-chip.on span { color: var(--bg); opacity: 0.8; }
+    .daybar-chip.star::after {
+      content: "★"; position: absolute; transform: translate(58px,-2px); color: var(--lantern); font-size: 12px;
+    }
+    .daybar-chip { position: relative; }
+
+    /* Skip menu */
+    .daybar-jump {
+      position: relative;
+      display: flex; align-items: stretch;
+      flex: 0 0 auto;
+      border-left: 1px solid var(--rule);
+      background: var(--bg);
+      transition: background var(--t-theme), border-color var(--t-theme);
+    }
+    .daybar-jump-btn {
+      display: flex; align-items: center; gap: 6px;
+      padding: 0 14px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase;
+      color: var(--fg);
+      transition: background 180ms, color 180ms;
+    }
+    .daybar-jump-btn:hover { background: var(--bg-2); }
+    .daybar-jump-btn.on { background: var(--accent); color: #fff; }
+    .daybar-menu {
+      position: absolute;
+      top: calc(100% + 1px); right: 0;
+      min-width: 240px;
+      background: var(--card); color: var(--card-fg);
+      border: 1px solid var(--rule);
+      box-shadow: 0 24px 60px -24px rgba(0,0,0,0.45);
+      z-index: 60;
+      display: flex; flex-direction: column;
+      animation: menuIn 220ms cubic-bezier(.2,.7,.2,1);
+      transform-origin: top right;
+    }
+    @keyframes menuIn { from { opacity: 0; transform: translateY(-6px) scale(0.98); } to { opacity: 1; transform: none; } }
+    .daybar-menu-label {
+      font-family: 'JetBrains Mono', monospace; font-size: 10px;
+      letter-spacing: 0.18em; text-transform: uppercase;
+      color: var(--fg-muted);
+      padding: 12px 14px 8px;
+      border-bottom: 1px solid var(--rule);
+    }
+    .daybar-menu-item {
+      display: flex; flex-direction: column; align-items: flex-start;
+      gap: 2px;
+      padding: 12px 14px;
+      text-align: left;
+      border-top: 1px solid var(--rule);
+      transition: background 140ms, color 140ms, padding 180ms;
+    }
+    .daybar-menu-item:first-of-type { border-top: 0; }
+    .daybar-menu-item b {
+      font-family: 'Bricolage Grotesque', sans-serif; font-weight: 800;
+      font-size: 18px; letter-spacing: -0.02em; line-height: 1;
+    }
+    .daybar-menu-item span {
+      font-family: 'JetBrains Mono', monospace; font-size: 10px;
+      letter-spacing: 0.14em; text-transform: uppercase;
+      color: var(--fg-muted);
+    }
+    .daybar-menu-item:hover { background: var(--accent); color: #fff; padding-left: 18px; }
+    .daybar-menu-item:hover span { color: rgba(255,255,255,0.85); }
+    .daybar-menu-item--top { background: var(--bg-2); }
+
+    /* === SECTION =============================================== */
+    .section { padding: 56px 20px; max-width: 1200px; margin: 0 auto; }
+    @media (min-width: 720px) { .section { padding: 96px 32px; } }
+    .section-head {
+      display: grid; grid-template-columns: 1fr; gap: 8px;
+      margin-bottom: 36px;
+    }
+    @media (min-width: 720px) { .section-head { grid-template-columns: 1fr 1fr; align-items: end; gap: 32px; } }
+    .eyebrow { color: var(--accent); }
+    .section-title {
+      font-size: clamp(48px, 11vw, 120px);
+      line-height: 0.86;
+      letter-spacing: -0.04em;
+      font-family: 'Bricolage Grotesque', sans-serif;
+      font-weight: 800;
+      text-wrap: balance;
+    }
+    .section-blurb { color: var(--fg-muted); font-size: 16px; max-width: 46ch; }
+
+    /* === FLIGHTS ================================================ */
+    .flight-grid { display: grid; grid-template-columns: 1fr; gap: 16px; }
+    @media (min-width: 900px) { .flight-grid { grid-template-columns: repeat(3, 1fr); } }
+    .flight-card {
+      border: 1px solid var(--rule);
+      background: var(--card); color: var(--card-fg);
+      padding: 22px 20px;
+      position: relative;
+      display: flex; flex-direction: column; gap: 18px;
+      transition: background var(--t-theme), color var(--t-theme);
+    }
+    .flight-kind {
+      position: absolute; top: -1px; left: -1px;
+      background: var(--fg); color: var(--bg);
+      padding: 6px 12px;
+      font-family: 'JetBrains Mono', monospace; font-size: 10px;
+      letter-spacing: 0.18em; text-transform: uppercase;
+    }
+    .flight-route { display: grid; grid-template-columns: 1fr auto 1fr; gap: 10px; align-items: end; margin-top: 18px; }
+    .flight-code { font-family: 'Bricolage Grotesque', sans-serif; font-weight: 800; font-size: 44px; letter-spacing: -0.03em; line-height: 1; }
+    .flight-city { font-size: 11px; color: var(--fg-muted); margin-top: 4px; font-family: 'JetBrains Mono', monospace; letter-spacing: 0.1em; text-transform: uppercase; }
+    .flight-arrow { font-size: 24px; color: var(--accent); }
+    .flight-times { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; padding-top: 14px; border-top: 1px solid var(--rule); font-variant-numeric: tabular-nums; }
+    .flight-times > div { display: flex; flex-direction: column; gap: 2px; }
+    .flight-times .label { color: var(--fg-muted); }
+    .flight-times b { font-family: 'JetBrains Mono', monospace; font-weight: 500; font-size: 14px; }
+    .flight-note { font-size: 13px; color: var(--fg-muted); border-top: 1px solid var(--rule); padding-top: 12px; }
+
+    /* === ITINERARY ============================================== */
+    .day-block { scroll-margin-top: 80px; }
+    .day-anchor {
+      display: flex; flex-direction: column; gap: 12px;
+      padding: 28px 0 18px;
+      border-top: 1px solid var(--rule);
+    }
+    .day-anchor:first-child { border-top: 0; padding-top: 0; }
+    .day-anchor-head { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+    .day-num {
+      font-family: 'Bricolage Grotesque', sans-serif; font-weight: 800;
+      font-size: clamp(72px, 18vw, 180px);
+      letter-spacing: -0.05em; line-height: 0.82;
+      color: var(--accent);
+      font-variant-numeric: tabular-nums;
+    }
+    .day-meta { display: flex; flex-direction: column; gap: 6px; align-items: flex-end; text-align: right; min-width: 160px; }
+    .day-title {
+      font-family: 'Bricolage Grotesque', sans-serif; font-weight: 800;
+      font-size: clamp(28px, 6vw, 56px);
+      letter-spacing: -0.03em; line-height: 0.95;
+      text-wrap: balance;
+    }
+    .day-city {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12.5px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+    }
+    .day-city-name { color: var(--fg); font-weight: 700; }
+    .day-city-sep  { color: var(--fg-muted); opacity: 0.7; }
+    .day-city-date {
+      color: var(--accent);
+      font-weight: 700;
+      padding: 2px 8px;
+      border: 1px solid var(--accent);
+      letter-spacing: 0.14em;
+    }
+    .day-tags { display: flex; gap: 6px; flex-wrap: wrap; }
+    .day-tag {
+      font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase;
+      padding: 3px 8px; border: 1px solid var(--rule); color: var(--fg-muted);
+    }
+    .day-tag.unmissable { background: var(--lantern); color: var(--ink); border-color: var(--lantern); }
+
+    .day-hero {
+      aspect-ratio: 4/3;
+      overflow: hidden;
+      background: var(--bg-2);
+      margin: 22px 0 32px;
+      position: relative;
+      isolation: isolate;
+    }
+    @media (min-width: 720px) { .day-hero { aspect-ratio: 21/9; margin: 28px 0 40px; } }
+    .day-hero::after {
+      content: "";
+      position: absolute; inset: auto 0 0 0; height: 60%;
+      background: linear-gradient(180deg, transparent 0%, rgba(0,0,0,0.55) 100%);
+      pointer-events: none;
+      z-index: 1;
+    }
+    .day-hero image-slot { width: 100%; height: 100%; display: block; }
+    .day-hero img { width: 100%; height: 100%; object-fit: cover; }
+    .day-hero .label {
+      position: absolute; left: 14px; bottom: 14px;
+      color: #fff;
+      letter-spacing: 0.22em;
+      font-size: 11px;
+      z-index: 2;
+      text-shadow: 0 1px 12px rgba(0,0,0,0.5);
+    }
+
+    .activity-list { display: flex; flex-direction: column; gap: 0; border-top: 1px solid var(--rule); }
+    .activity {
+      border-bottom: 1px solid var(--rule);
+      transition: background 250ms;
+    }
+    .activity-toggle {
+      display: grid;
+      grid-template-columns: 92px 1fr auto;
+      align-items: center;
+      gap: 14px;
+      width: 100%;
+      padding: 16px 4px;
+      text-align: left;
+      transition: padding 220ms;
+    }
+    .activity-toggle:hover { background: var(--bg-2); }
+    .activity-time {
+      font-variant-numeric: tabular-nums;
+      letter-spacing: 0.02em;
+      color: var(--fg);
+      line-height: 1.1;
+    }
+    .activity-time.is-clock {
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 500;
+      font-size: 15px;
+    }
+    .activity-time.is-fuzzy {
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 400;
+      font-size: 11px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--fg-muted);
+    }
+    .activity-title {
+      font-family: 'Bricolage Grotesque', sans-serif;
+      font-weight: 700;
+      font-size: 18px;
+      letter-spacing: -0.015em;
+      line-height: 1.2;
+    }
+    .activity-mood {
+      width: 10px; height: 10px;
+      border-radius: 50%;
+    }
+    .mood-morning  { background: var(--lantern); }
+    .mood-afternoon{ background: var(--terracotta); }
+    .mood-evening  { background: var(--emerald); }
+    .mood-night    { background: oklch(0.45 0.08 280); }
+
+    .activity-caret {
+      width: 28px; height: 28px;
+      display: grid; place-items: center;
+      transition: transform 280ms cubic-bezier(.2,.7,.2,1);
+    }
+    .activity.open .activity-caret { transform: rotate(45deg); color: var(--accent); }
+    .activity-body {
+      display: grid;
+      grid-template-rows: 0fr;
+      transition: grid-template-rows 380ms cubic-bezier(.2,.7,.2,1);
+    }
+    .activity-body > div { overflow: hidden; }
+    .activity.open .activity-body { grid-template-rows: 1fr; }
+    .activity-detail {
+      padding: 0 4px 22px 106px;
+      color: var(--fg-muted);
+      font-size: 14.5px;
+      line-height: 1.6;
+      max-width: 64ch;
+    }
+    @media (max-width: 380px) {
+      .activity-detail { padding-left: 16px; }
+      .activity-toggle { grid-template-columns: 72px 1fr auto; }
+    }
+    .activity-actions { display: flex; gap: 8px; margin-top: 12px; flex-wrap: wrap; }
+    .btn-ghost {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      padding: 6px 10px;
+      border: 1px solid var(--rule);
+      transition: background 160ms, color 160ms, border-color 160ms;
+    }
+    .btn-ghost:hover { background: var(--fg); color: var(--bg); border-color: var(--fg); }
+
+    .day-tip {
+      margin-top: 18px;
+      padding: 16px 18px;
+      background: var(--bg-2);
+      border-left: 3px solid var(--accent);
+      font-size: 14px;
+      color: var(--fg);
+    }
+    .day-tip b { font-family: 'JetBrains Mono', monospace; font-weight: 500; font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--accent); display: block; margin-bottom: 4px; }
+
+    /* === REGIONAL MAP =========================================== */
+    .region-map {
+      margin: 0 0 28px;
+      border: 1px solid var(--rule);
+      background: var(--card);
+      color: var(--card-fg);
+      display: grid;
+      grid-template-columns: 1fr;
+      transition: background var(--t-theme), color var(--t-theme);
+    }
+    @media (min-width: 720px) { .region-map { grid-template-columns: 280px 1fr; } }
+    .region-map-head {
+      padding: 18px 20px;
+      display: flex; flex-direction: column; gap: 14px;
+      border-bottom: 1px solid var(--rule);
+    }
+    @media (min-width: 720px) {
+      .region-map-head { border-bottom: 0; border-right: 1px solid var(--rule); justify-content: center; }
+    }
+    .region-map-eyebrow { color: var(--accent); }
+    .region-map-stats {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 12px 16px;
+    }
+    .region-map-stats > div {
+      display: flex; flex-direction: column; gap: 4px;
+      padding: 8px 0; border-top: 1px solid var(--rule);
+    }
+    .region-map-stats > div:first-child, .region-map-stats > div:nth-child(2) {
+      border-top: 0; padding-top: 0;
+    }
+    .region-map-stats .label { color: var(--fg-muted); }
+    .region-map-stats b {
+      font-family: 'Bricolage Grotesque', sans-serif; font-weight: 700;
+      font-size: 16px; letter-spacing: -0.015em; line-height: 1.1;
+    }
+    .region-map-canvas {
+      aspect-ratio: 5/3;
+      background: var(--bg-2);
+      color: var(--fg);
+      position: relative;
+      overflow: hidden;
+    }
+    @media (min-width: 720px) { .region-map-canvas { aspect-ratio: 2/1; } }
+    .region-map-canvas svg { width: 100%; height: 100%; display: block; }
+
+    /* === HOTELS ================================================ */
+    .hotel-grid { display: grid; grid-template-columns: 1fr; gap: 16px; }
+    @media (min-width: 720px) { .hotel-grid { grid-template-columns: repeat(2, 1fr); } }
+    .hotel-card {
+      border: 1px solid var(--rule);
+      background: var(--card); color: var(--card-fg);
+      padding: 22px;
+      position: relative;
+      display: flex; flex-direction: column; gap: 12px;
+      transition: background var(--t-theme), color var(--t-theme);
+    }
+    .hotel-status {
+      position: absolute; top: -1px; right: -1px;
+      padding: 5px 10px;
+      font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase;
+    }
+    .hotel-status.booked { background: var(--emerald); color: #fff; }
+    .hotel-status.tbc { background: var(--lantern); color: var(--ink); }
+    .hotel-name {
+      font-family: 'Bricolage Grotesque', sans-serif; font-weight: 800;
+      font-size: 28px; letter-spacing: -0.025em; line-height: 1;
+      margin-top: 4px;
+    }
+    .hotel-tags { display: flex; gap: 6px; flex-wrap: wrap; }
+    .hotel-tags span { font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; padding: 3px 8px; border: 1px solid var(--rule); color: var(--fg-muted); }
+
+    /* === PHRASES ============================================== */
+    .phrase-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1px;
+      background: var(--rule);
+      border: 1px solid var(--rule);
+    }
+    @media (min-width: 540px) { .phrase-grid { grid-template-columns: 1fr 1fr; } }
+    @media (min-width: 900px) { .phrase-grid { grid-template-columns: repeat(3, 1fr); } }
+    .phrase {
+      background: var(--card); color: var(--card-fg);
+      padding: 18px;
+      display: flex; flex-direction: column; gap: 6px;
+      transition: background var(--t-theme), color var(--t-theme);
+    }
+    .phrase-vn {
+      font-family: 'Bricolage Grotesque', sans-serif; font-weight: 800;
+      font-size: 28px; letter-spacing: -0.025em; line-height: 1.05;
+    }
+    .phrase-say {
+      font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--fg-muted);
+    }
+    .phrase-en { font-size: 14px; color: var(--fg); margin-top: 2px; }
+    .phrase-note { font-size: 11px; color: var(--accent); margin-top: 4px; font-family: 'JetBrains Mono', monospace; letter-spacing: 0.08em; }
+
+    /* === MAP DRAWER =========================================== */
+    .mapcard {
+      border: 1px solid var(--rule);
+      background: var(--card); color: var(--card-fg);
+      padding: 22px;
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 22px;
+      transition: background var(--t-theme), color var(--t-theme);
+    }
+    @media (min-width: 720px) { .mapcard { grid-template-columns: 1.1fr 1fr; align-items: center; } }
+    .map-mini { aspect-ratio: 3/4; background: var(--bg-2); position: relative; overflow: hidden; }
+    @media (min-width: 720px) { .map-mini { aspect-ratio: 4/5; } }
+    .map-mini svg { width: 100%; height: 100%; display: block; }
+    .map-cta {
+      width: 100%;
+      padding: 18px 22px;
+      background: var(--fg); color: var(--bg);
+      font-family: 'Bricolage Grotesque', sans-serif; font-weight: 800;
+      font-size: 18px; letter-spacing: -0.02em;
+      display: flex; align-items: center; justify-content: space-between; gap: 12px;
+      transition: background 180ms;
+    }
+    .map-cta:hover { background: var(--accent); color: #fff; }
+
+    /* Drawer */
+    .drawer-scrim {
+      position: fixed; inset: 0; z-index: 100;
+      background: rgba(0,0,0,0); transition: background 280ms; pointer-events: none;
+    }
+    .drawer-scrim.open { background: rgba(0,0,0,0.55); pointer-events: auto; }
+    .drawer {
+      position: fixed; left: 0; right: 0; bottom: 0; z-index: 101;
+      background: var(--card); color: var(--card-fg);
+      transform: translateY(100%);
+      max-height: 92vh; overflow: hidden;
+      display: flex; flex-direction: column;
+      overscroll-behavior: contain;
+      transition: background var(--t-theme), color var(--t-theme), transform 380ms cubic-bezier(.2,.7,.2,1);
+    }
+    .drawer.open { transform: translateY(0); }
+    .drawer-handle { display: grid; place-items: center; padding: 10px 0 4px; }
+    .drawer-handle div { width: 44px; height: 4px; background: var(--rule); border-radius: 999px; }
+    .drawer-head { padding: 6px 20px 16px; display: flex; align-items: center; justify-content: space-between; gap: 12px; border-bottom: 1px solid var(--rule); }
+    .drawer-title { font-family: 'Bricolage Grotesque', sans-serif; font-weight: 800; font-size: 22px; letter-spacing: -0.025em; }
+    .drawer-close {
+      width: 36px; height: 36px; border: 1px solid var(--rule);
+      display: grid; place-items: center;
+    }
+    .drawer-body { overflow: auto; padding: 16px 20px 28px; display: grid; grid-template-columns: 1fr; gap: 14px; }
+    @media (min-width: 720px) { .drawer-body { grid-template-columns: 1.1fr 1fr; gap: 24px; padding: 22px 28px 32px; } }
+    .map-full { aspect-ratio: 3/4; background: var(--bg-2); position: relative; overflow: hidden; }
+    .map-full svg { width: 100%; height: 100%; }
+    .map-legend { display: flex; flex-direction: column; gap: 6px; }
+    .map-legend-item {
+      display: grid; grid-template-columns: 28px 1fr auto; gap: 10px; align-items: center;
+      padding: 10px 12px; border: 1px solid var(--rule);
+      font-family: 'Manrope', sans-serif;
+    }
+    .map-legend-item .n {
+      width: 24px; height: 24px; border-radius: 50%;
+      background: var(--accent); color: #fff;
+      display: grid; place-items: center;
+      font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 700;
+    }
+    .map-legend-item b { font-size: 14px; font-family: 'Bricolage Grotesque', sans-serif; font-weight: 700; }
+    .map-legend-item span { font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--fg-muted); display: block; margin-top: 2px; }
+    .map-legend-item em { font-style: normal; font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--fg-muted); letter-spacing: 0.1em; }
+
+    /* === SECTION HEADER VARIANT ============================== */
+    .marquee {
+      overflow: hidden;
+      border-top: 1px solid var(--rule);
+      border-bottom: 1px solid var(--rule);
+      padding: 14px 0;
+      white-space: nowrap;
+      background: var(--bg);
+      transition: background var(--t-theme);
+    }
+    .marquee-track {
+      display: inline-flex; gap: 28px; align-items: center;
+      animation: marquee 40s linear infinite;
+      will-change: transform;
+    }
+    .marquee-track span {
+      font-family: 'Bricolage Grotesque', sans-serif; font-weight: 800;
+      font-size: 28px; letter-spacing: -0.02em;
+    }
+    .marquee-track i { font-style: normal; color: var(--accent); }
+    @keyframes marquee {
+      from { transform: translateX(0); }
+      to { transform: translateX(-50%); }
+    }
+
+    /* === FOOTER ============================================== */
+    footer.foot {
+      padding: 48px 20px 80px;
+      max-width: 1200px; margin: 0 auto;
+      display: flex; flex-direction: column; gap: 16px;
+      border-top: 1px solid var(--rule);
+    }
+    .foot-title {
+      font-family: 'Bricolage Grotesque', sans-serif; font-weight: 800;
+      font-size: clamp(36px, 8vw, 72px); letter-spacing: -0.04em; line-height: 0.9;
+    }
+    .foot-row { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--fg-muted); }
+
+    /* === SCROLLBAR ========================================== */
+    body::-webkit-scrollbar { width: 10px; }
+    body::-webkit-scrollbar-track { background: transparent; }
+    body::-webkit-scrollbar-thumb { background: var(--rule); }
   </style>
 </head>
 <body>
-
-<!-- LOADER SPLASH -->
-<div id="loader">
-  <div class="loader-inner">
-    <span class="loader-eyebrow">Family Expedition · 2026</span>
-    <div class="loader-name">
-      <span>VIET</span>
-      <span class="loader-diamond">◆</span>
-      <span>NAM</span>
-    </div>
-    <div class="loader-bar"><div class="loader-bar-fill"></div></div>
-    <div class="loader-footer">Doos Family &nbsp;·&nbsp; June 2026</div>
-  </div>
-</div>
-<script>
-  // Isolated loader dismiss — own script tag so JS errors elsewhere can't stop it
-  setTimeout(function() {
-    var l = document.getElementById('loader');
-    if (!l) return;
-    l.style.transition = 'opacity 0.65s ease';
-    l.style.opacity = '0';
-    l.style.pointerEvents = 'none';
-    setTimeout(function() { if (l.parentNode) l.parentNode.removeChild(l); }, 700);
-  }, 1400);
-</script>
-
-<div class="scroll-progress" id="scroll-progress"></div>
-
-<!-- NAV -->
-<nav id="main-nav">
-  <div class="nav-logo">🇻🇳 The Doos · Vietnam '26</div>
-  <div class="nav-clock" id="nav-clock">
-    <div class="nav-clock-city mel-only"><div class="nav-clock-label">MEL</div><div class="nav-clock-time" id="clock-mel">--:--</div></div>
-    <div class="nav-clock-sep mel-only">·</div>
-    <div class="nav-clock-city"><div class="nav-clock-label">SGN</div><div class="nav-clock-time" id="clock-sgn">--:--</div></div>
-  </div>
-  <ul class="nav-links">
-    <li><a href="#overview">Flights</a></li>
-    <li><a href="#itinerary">Itinerary</a></li>
-    <li><a href="#maps">Maps</a></li>
-    <li><a href="#hotels">Hotels</a></li>
-  </ul>
-</nav>
-
-<!-- HERO DASHBOARD -->
-<div class="hero-dashboard">
-
-  <!-- LEFT: info panel -->
-  <div class="hero-left">
-    <div class="hero-carto-title">
-      <span class="hero-carto-eyebrow">Family Expedition</span>
-      <div class="hero-carto-rule"></div>
-      <div class="hero-carto-name">
-        <span class="hero-carto-viet">VIET</span>
-        <span class="hero-carto-diamond">◆</span>
-        <span class="hero-carto-nam">NAM</span>
-      </div>
-      <div class="hero-carto-rule"></div>
-      <span class="hero-carto-footer">Doos Family &nbsp;·&nbsp; June 2026</span>
-    </div>
-    <p class="hero-dash-sub">Two weeks. South to north. From Saigon's streets to Ha Long Bay's limestone towers.</p>
-    <div class="hero-travellers">
-      <span class="traveller-pill">👩 Christine</span>
-      <span class="traveller-pill">👨 Ashraf</span>
-      <span class="traveller-pill">👦 Jason</span>
-      <span class="traveller-pill">🧑 Chris</span>
-    </div>
-    <div class="hero-rule"></div>
-    <div class="countdown-wrap">
-      <p class="countdown-label">Time until we leave Melbourne</p>
-      <div class="countdown-boxes" id="countdown-boxes">
-        <div class="countdown-box"><span class="countdown-num" id="cd-days">--</span><span class="countdown-unit">Days</span></div>
-        <div class="countdown-box"><span class="countdown-num" id="cd-hours">--</span><span class="countdown-unit">Hours</span></div>
-        <div class="countdown-box"><span class="countdown-num" id="cd-mins">--</span><span class="countdown-unit">Mins</span></div>
-        <div class="countdown-box"><span class="countdown-num" id="cd-secs">--</span><span class="countdown-unit">Secs</span></div>
-      </div>
-    </div>
-    <div class="hero-stats">
-      <div class="stat"><span class="stat-num">13</span><span class="stat-label">Nights</span></div>
-      <div class="stat"><span class="stat-num">2</span><span class="stat-label">Cities</span></div>
-      <div class="stat"><span class="stat-num">11 Jun</span><span class="stat-label">Depart</span></div>
-      <div class="stat"><span class="stat-num">23 Jun</span><span class="stat-label">Return</span></div>
-    </div>
-    <div class="hero-coords">MEL → SGN · HAN → MEL · 8,900 km each way</div>
-  </div>
-
-  <!-- RIGHT: map panel with city pins -->
-  <div class="hero-right" id="hero-right">
-    <div class="hero-right-scrim"></div>
-    <div class="hero-right-grid"></div>
-
-    <div class="hero-pin" data-hcity="hcmc">
-      <div class="hero-pin-dot"></div>
-      <div class="hero-pin-ring"></div>
-      <div class="hero-pin-ring hero-pin-ring2"></div>
-      <div class="hero-pin-tag">
-        <span class="hero-pin-tag-name">Ho Chi Minh City</span>
-        <span class="hero-pin-tag-dates">11–15 Jun · 4 nights</span>
-      </div>
-    </div>
-    <div class="hero-pin hero-pin-sm" data-hcity="mekong">
-      <div class="hero-pin-dot"></div>
-    </div>
-    <div class="hero-pin hero-pin-sm" data-hcity="cuchi">
-      <div class="hero-pin-dot"></div>
-    </div>
-    <div class="hero-pin" data-hcity="hanoi">
-      <div class="hero-pin-dot"></div>
-      <div class="hero-pin-ring"></div>
-      <div class="hero-pin-ring hero-pin-ring2"></div>
-      <div class="hero-pin-tag tag-left">
-        <span class="hero-pin-tag-name">Hanoi</span>
-        <span class="hero-pin-tag-dates">15–23 Jun · 8 nights</span>
-      </div>
-    </div>
-    <div class="hero-pin hero-pin-sm" data-hcity="ninhbinh">
-      <div class="hero-pin-dot"></div>
-      <div class="hero-pin-tag tag-left">
-        <span class="hero-pin-tag-name">Ninh Binh</span>
-        <span class="hero-pin-tag-dates">20 Jun · day trip</span>
-      </div>
-    </div>
-    <div class="hero-pin" data-hcity="halong">
-      <div class="hero-pin-dot"></div>
-      <div class="hero-pin-ring"></div>
-      <div class="hero-pin-ring hero-pin-ring2"></div>
-      <div class="hero-pin-tag">
-        <span class="hero-pin-tag-name">Ha Long Bay</span>
-        <span class="hero-pin-tag-dates">17–18 Jun · cruise</span>
-      </div>
-    </div>
-  </div>
-
-</div>
-
-<!-- CINEMATIC IMAGE BAND -->
-<div class="img-band">
-  <div class="img-band-item">
-    <img src="img/halong-bay.jpg" alt="Ha Long Bay" />
-    <span class="img-band-label">Ha Long Bay</span>
-  </div>
-  <div class="img-band-item">
-    <img src="img/hcmc-night.jpg" alt="Ho Chi Minh City at night" />
-    <span class="img-band-label">Ho Chi Minh City</span>
-  </div>
-  <div class="img-band-item">
-    <img src="img/ninh-binh.jpg" alt="Ninh Binh pagoda" />
-    <span class="img-band-label">Ninh Binh</span>
-  </div>
-  <div class="img-band-item">
-    <img src="img/pho.jpg" alt="Vietnamese pho" />
-    <span class="img-band-label">Pho</span>
-  </div>
-  <div class="img-band-item">
-    <img src="img/street-food.jpg" alt="Vietnamese street food" />
-    <span class="img-band-label">Street Food</span>
-  </div>
-</div>
-
-
-<!-- FLIGHTS -->
-<section id="overview">
-  <p class="section-eyebrow" data-reveal>Getting There</p>
-  <h2 class="section-title" data-reveal>Our Flights</h2>
-  <p class="section-intro" data-reveal>All sorted: three flights, two cities. Just make sure your passports are valid for at least 6 months beyond June 2026 and you're good to go.</p>
-  <div class="section-divider" data-reveal></div>
-
-  <div class="flights-grid">
-    <div class="flight-card" data-reveal delay-1>
-      <span class="flight-badge">✈ Outbound</span>
-      <div class="flight-route">
-        <div><div class="flight-city">Melbourne</div><div class="flight-code">MEL · Terminal 2</div></div>
-        <div class="flight-arrow">→</div>
-        <div><div class="flight-city">Ho Chi Minh City</div><div class="flight-code">SGN · Terminal 2</div></div>
-      </div>
-      <span class="flight-date">Thursday 11 June 2026</span>
-      <div class="flight-meta">Departs 10:35 AM · Arrives 4:15 PM<br>Flight duration ~8 hrs 40 min<br><span style="opacity:0.5;font-size:0.78em">Vietnam Airlines · VN780 · Airbus A350</span></div>
-      <div class="tz-note">⏰ Vietnam is 3 hours behind Melbourne (AEST). When we land at 4:15 PM local time, your body will think it's 7:15 PM, which is pretty manageable! The drive from Tan Son Nhat Airport to our hotel in District 3 is about 45 minutes.</div>
-    </div>
-
-    <div class="flight-card" data-reveal delay-2>
-      <span class="flight-badge">✈ Internal</span>
-      <div class="flight-route">
-        <div><div class="flight-city">Ho Chi Minh City</div><div class="flight-code">SGN · Terminal 1</div></div>
-        <div class="flight-arrow">→</div>
-        <div><div class="flight-city">Hanoi</div><div class="flight-code">HAN · Terminal 1</div></div>
-      </div>
-      <span class="flight-date">Monday 15 June 2026</span>
-      <div class="flight-meta">Departs 8:30 PM · Arrives 10:35 PM<br>Flight duration ~2 hrs 5 min<br><span style="opacity:0.5;font-size:0.78em">Vietnam Airlines · VN256</span><br><br>Late arrival — I'll pre-book our transfer to the Hanoi hotel so we're not figuring it out at midnight half asleep.</div>
-    </div>
-
-    <div class="flight-card" data-reveal delay-3>
-      <span class="flight-badge">✈ Return</span>
-      <div class="flight-route">
-        <div><div class="flight-city">Hanoi</div><div class="flight-code">HAN · Terminal 2</div></div>
-        <div class="flight-arrow">→</div>
-        <div><div class="flight-city">Melbourne</div><div class="flight-code">MEL · Terminal 2</div></div>
-      </div>
-      <span class="flight-date">Tuesday 23 June 2026</span>
-      <div class="flight-meta">Departs 9:55 AM · Arrives 10:15 PM<br>Flight duration ~9 hrs 20 min<br><span style="opacity:0.5;font-size:0.78em">Vietnam Airlines · VN779 · Airbus A350-900</span><br><br>We need to leave the hotel by 7:30 AM. Yes I know. Last day. Sorry 😅</div>
-      <div class="tz-note">⏰ Heading home we jump forward 3 hours. Melbourne is ahead of Vietnam. The flight's ~9.5 hrs but you land feeling like you've skipped half the day. We need to be at Noi Bai Airport by 8:25am, which means leaving the hotel at 7:30am sharp.</div>
-    </div>
-  </div>
-</section>
-
-<!-- ITINERARY -->
-<section id="itinerary">
-  <p class="section-eyebrow" data-reveal>Day by Day</p>
-  <h2 class="section-title" data-reveal>The Plan</h2>
-  <p class="section-intro" data-reveal>I've tried to get the balance right, with enough to see the good stuff without completely exhausting ourselves. Plenty of boat rides, Grab taxis and relaxed afternoons built in. Click each day to expand it.</p>
-  <div class="section-divider" data-reveal></div>
-
-  <!-- HO CHI MINH CITY -->
-  <div class="city-block">
-    <div class="city-header" data-reveal="left">
-      <div class="city-icon saigon">🏙️</div>
-      <div>
-        <div class="city-name">Ho Chi Minh City</div>
-        <div class="city-dates">11-15 June · 4 nights · Lotus Saigon Hotel, District 3</div>
-      </div>
-    </div>
-    <div class="days-list">
-
-      <div class="day-card" data-reveal onclick="toggleDay(this)">
-        <div class="day-header">
-          <div class="day-num">11 Jun</div>
-          <div class="day-info">
-            <div class="day-title">Arrival Day</div>
-            <div class="day-date">Thursday 11 June</div>
-            <div class="day-tags"><span class="tag tag-travel">Travel</span><span class="tag tag-food">Food</span><span class="tag tag-relax">Easy</span></div>
-          </div>
-          <div class="day-chevron">▼</div>
-        </div>
-        <div class="day-body"><div class="day-content">
-          <ul class="activity-list">
-            <li>Land at 4:15pm. It's about 45 minutes by Grab from Tan Son Nhat Airport to our hotel in District 3, so we'll be checked in by around 5:15pm. Freshen up and head out for dinner.</li>
-            <li>The hotel rooftop pool is on level 19 if anyone's feeling more awake than expected.</li>
-          </ul>
-          <div class="tip-note">Use the Grab app for taxis, not the random ones at the airport. Set it up before we land.</div>
-        </div></div>
-      </div>
-
-      <div class="day-card" data-reveal onclick="toggleDay(this)">
-        <div class="day-header">
-          <div class="day-num">12 Jun</div>
-          <div class="day-info">
-            <div class="day-title">History & Markets</div>
-            <div class="day-date">Friday 12 June</div>
-            <div class="day-tags"><span class="tag tag-culture">History</span><span class="tag tag-shopping">Shopping</span><span class="tag tag-food">Food</span></div>
-          </div>
-          <div class="day-chevron">▼</div>
-        </div>
-        <div class="day-body"><div class="day-content">
-          <ul class="activity-list">
-            <li>Early start for the War Remnants Museum. It's about a 10-minute Grab from the hotel, or 20 minutes on foot if the morning is cool enough. Worth going before the heat kicks in. It's heavy going emotionally. Take your time with it.</li>
-            <li>Back to the hotel by midday for lunch and a rest. Then Ben Thanh Market in the afternoon. It's about a 5-minute Grab from the hotel, or walkable in around 15 minutes. Good for souvenirs, coffee, scarves, snacks.</li>
-            <li>The market area turns into a street food night market after 6pm, which is a great way to spend the evening.</li>
-          </ul>
-          <div class="tip-note">Haggling is expected at Ben Thanh. Start low and just walk away if they won't budge. Works every time.</div>
-          <div class="act-chips">
-            <button class="act-chip" onclick="openActivity('war-museum');event.stopPropagation()">🏛️ War Remnants Museum <span class="act-chip-arrow">↗</span></button>
-            <button class="act-chip" onclick="openActivity('ben-thanh');event.stopPropagation()">🛒 Ben Thanh Market <span class="act-chip-arrow">↗</span></button>
-          </div>
-        </div></div>
-      </div>
-
-      <div class="day-card" data-reveal onclick="toggleDay(this)">
-        <div class="day-header">
-          <div class="day-num">13 Jun</div>
-          <div class="day-info">
-            <div class="day-title">Cu Chi Tunnels Day Trip</div>
-            <div class="day-date">Saturday 13 June</div>
-            <div class="day-tags"><span class="tag tag-culture">History</span><span class="tag tag-nature">Outdoors</span></div>
-          </div>
-          <div class="day-chevron">▼</div>
-        </div>
-        <div class="day-body"><div class="day-content">
-          <ul class="activity-list">
-            <li>Tour bus picks us up in the morning. The drive is about 1.5 hours northwest of the city, so we'll be there by mid-morning. I'll book a small group one rather than the giant 40-person buses. It's a really fascinating piece of history and a completely different side of Vietnam.</li>
-            <li>Jason, you can crawl through the actual tunnels if you want to. I'd maybe go with the enlarged tourist version rather than the original ones, unless you're keen to really test yourself 😂</li>
-            <li>Back at the hotel by mid-afternoon (another 1.5 hrs back). Rooftop pool. You'll have earnt it.</li>
-          </ul>
-          <div class="tip-note">Everything is at your own pace, with plenty of shade and benches, no rushing.</div>
-          <div class="act-chips">
-            <button class="act-chip" onclick="openActivity('cu-chi');event.stopPropagation()">🪖 Cu Chi Tunnels <span class="act-chip-arrow">↗</span></button>
-          </div>
-        </div></div>
-      </div>
-
-      <div class="day-card" data-reveal onclick="toggleDay(this)">
-        <div class="day-header">
-          <div class="day-num">14 Jun</div>
-          <div class="day-info">
-            <div class="day-title">Mekong Delta: Full Day Boat Tour</div>
-            <div class="day-date">Sunday 14 June</div>
-            <div class="day-tags"><span class="tag tag-nature">Nature</span><span class="tag tag-food">Food</span><span class="tag tag-relax">Relaxed</span></div>
-          </div>
-          <div class="day-chevron">▼</div>
-        </div>
-        <div class="day-body"><div class="day-content">
-          <ul class="activity-list">
-            <li>Full day out on the Mekong. The coach picks us up from the hotel and it's about 1.5 hours south of HCMC to reach the delta. Canals, rice paddies, coconut palms, small fishing villages. It's a completely different side of Vietnam to the city.</li>
-            <li>Stops along the way at a coconut candy factory (Mum, this one's for you), a bee farm, and a tropical fruit garden with live traditional music. Lunch is included.</li>
-            <li>There's a narrow canal canoe ride where local rowers take you through the jungle. You just sit back and take it in.</li>
-            <li>Last night in HCMC when we get back, so let's find somewhere good for dinner.</li>
-          </ul>
-          <div class="act-chips">
-            <button class="act-chip" onclick="openActivity('mekong');event.stopPropagation()">🚣 Mekong Delta Boat Tour <span class="act-chip-arrow">↗</span></button>
-          </div>
-        </div></div>
-      </div>
-
-      <div class="day-card" data-reveal onclick="toggleDay(this)">
-        <div class="day-header">
-          <div class="day-num">15 Jun</div>
-          <div class="day-info">
-            <div class="day-title">Free Morning · Fly to Hanoi</div>
-            <div class="day-date">Monday 15 June</div>
-            <div class="day-tags"><span class="tag tag-relax">Relax</span><span class="tag tag-travel">Travel</span></div>
-          </div>
-          <div class="day-chevron">▼</div>
-        </div>
-        <div class="day-body"><div class="day-content">
-          <ul class="activity-list">
-            <li>Nothing planned for the morning. Sleep in, rooftop pool one last time, leisurely breakfast.</li>
-            <li>Head to the airport in the afternoon. Tan Son Nhat is about 40 minutes from District 3, so aim to leave by 5:30pm for our 8:30pm departure. The flight is 2 hours 5 minutes and lands at 10:35pm. Transfer will be pre-booked so it's straight to the hotel and bed. Noi Bai Airport is about 45 minutes from the Old Quarter.</li>
-          </ul>
-        </div></div>
-      </div>
-
-    </div>
-  </div>
-
-  <!-- HCMC photo row -->
-  <div class="section-photo-row three" data-reveal>
-    <img src="img/cu-chi.jpg" alt="Cu Chi Tunnels" />
-    <img src="img/mekong-boat.jpg" alt="Mekong Delta boat" />
-    <img src="img/banh-mi.jpg" alt="Banh mi" />
-  </div>
-
-  <!-- HANOI -->
-  <div class="section-photo-row" data-reveal>
-    <img src="img/hanoi-old-quarter.jpg" alt="Hanoi Old Quarter" />
-    <img src="img/hoan-kiem.jpg" alt="Hoan Kiem Lake" />
-  </div>
-  <div class="city-block">
-    <div class="city-header" data-reveal="left">
-      <div class="city-icon hanoi">🏯</div>
-      <div>
-        <div class="city-name">Hanoi</div>
-        <div class="city-dates">15-23 June · 7 nights · Old Quarter (hotel TBC)</div>
-      </div>
-    </div>
-    <div class="days-list">
-
-      <div class="day-card" data-reveal onclick="toggleDay(this)">
-        <div class="day-header">
-          <div class="day-num">16 Jun</div>
-          <div class="day-info">
-            <div class="day-title">Old Quarter, Hoan Kiem Lake & Hoa Lo Prison</div>
-            <div class="day-date">Tuesday 16 June</div>
-            <div class="day-tags"><span class="tag tag-culture">History</span><span class="tag tag-food">Food</span><span class="tag tag-shopping">Shopping</span></div>
-          </div>
-          <div class="day-chevron">▼</div>
-        </div>
-        <div class="day-body"><div class="day-content">
-          <ul class="activity-list">
-            <li>Slow start given we arrived late. Hanoi feels completely different to HCMC. Older, cooler, more French colonial. Worth just taking it in over breakfast.</li>
-            <li>Hoa Lo Prison when we're ready. It's about a 10-minute walk from most Old Quarter hotels, or a very short Grab. It covers both the French colonial era and the Vietnam War and it's fascinating. Get the audio guide, it's worth it.</li>
-            <li>Walk down to Hoan Kiem Lake after. It's about 10 minutes on foot from Hoa Lo Prison. There's a little temple on an island in the middle connected by a red bridge which is really beautiful. Everything today is pretty much walkable.</li>
-            <li>Afternoon wander through the Old Quarter's 36 streets (you could walk end to end in 20 minutes, but you won't), then street food in the evening. Try the egg coffee.</li>
-          </ul>
-          <div class="act-chips">
-            <button class="act-chip" onclick="openActivity('hoa-lo');event.stopPropagation()">🏯 Hoa Lo Prison & Old Quarter <span class="act-chip-arrow">↗</span></button>
-          </div>
-        </div></div>
-      </div>
-
-      <div class="day-card" data-reveal onclick="toggleDay(this)">
-        <div class="day-header">
-          <div class="day-num">17-18 Jun</div>
-          <div class="day-info">
-            <div class="day-title">Ha Long Bay: Mon Cheri Cruise ⭐</div>
-            <div class="day-date">Wednesday-Thursday 17-18 June</div>
-            <div class="day-tags"><span class="tag tag-nature">Nature</span><span class="tag tag-food">Food</span><span class="tag tag-relax">Unmissable</span></div>
-          </div>
-          <div class="day-chevron">▼</div>
-        </div>
-        <div class="day-body"><div class="day-content">
-          <ul class="activity-list">
-            <li>Ha Long Bay. Thousands of limestone towers rising out of emerald green water. It's quite something.</li>
-            <li>Coach picks us up from the hotel around 8am for the drive to the bay. It's about 3.5 hours to Ha Long City, so we arrive at the harbour around 11:30am, board the Mon Cheri, and have lunch on deck as we sail out. The moment the limestone karsts appear around you, everyone goes quiet. It does that to people.</li>
-            <li>Afternoon cruising, a cave visit, optional kayaking. Sunset on deck with drinks, seafood dinner on board, then sleep on the boat.</li>
-            <li>Sunrise on deck the next morning, breakfast on board, then the 3.5-hour coach back to Hanoi. We'll be back in the Old Quarter by early evening.</li>
-          </ul>
-          <div class="tip-note">Kayaking is completely optional. You can just sit on the deck and let the views do the work.</div>
-          <div class="act-chips">
-            <button class="act-chip" onclick="openActivity('halong');event.stopPropagation()">⛵ Ha Long Bay Cruise <span class="act-chip-arrow">↗</span></button>
-          </div>
-        </div></div>
-      </div>
-
-      <div class="day-card" data-reveal onclick="toggleDay(this)">
-        <div class="day-header">
-          <div class="day-num">19 Jun</div>
-          <div class="day-info">
-            <div class="day-title">Temple of Literature & Shopping</div>
-            <div class="day-date">Friday 19 June</div>
-            <div class="day-tags"><span class="tag tag-culture">Culture</span><span class="tag tag-shopping">Shopping</span><span class="tag tag-relax">Easy</span></div>
-          </div>
-          <div class="day-chevron">▼</div>
-        </div>
-        <div class="day-body"><div class="day-content">
-          <ul class="activity-list">
-            <li>Slow start after two days on the bay. No alarm, proper breakfast.</li>
-            <li>Temple of Literature when we're ready. It's about a 15-minute Grab from the Old Quarter. Vietnam's first university, built in 1070. The courtyards are beautiful and it's a peaceful spot. Worth hiring a guide there as the history is what makes it.</li>
-            <li>Afternoon shopping in the Old Quarter. Hang Gai Street is walkable from the hotel, and Dong Xuan Market is about 15 minutes on foot through the old streets.</li>
-            <li>For dinner, try Cha Ca La Vong. Turmeric fish cooked at the table with dill. Worth trying.</li>
-          </ul>
-          <div class="act-chips">
-            <button class="act-chip" onclick="openActivity('temple');event.stopPropagation()">🏛️ Temple of Literature <span class="act-chip-arrow">↗</span></button>
-          </div>
-        </div></div>
-      </div>
-
-      <div class="day-card" data-reveal onclick="toggleDay(this)">
-        <div class="day-header">
-          <div class="day-num">20 Jun</div>
-          <div class="day-info">
-            <div class="day-title">Ninh Binh: Ha Long Bay on Land</div>
-            <div class="day-date">Saturday 20 June</div>
-            <div class="day-tags"><span class="tag tag-nature">Nature</span><span class="tag tag-culture">History</span><span class="tag tag-relax">Scenic</span></div>
-          </div>
-          <div class="day-chevron">▼</div>
-        </div>
-        <div class="day-body"><div class="day-content">
-          <ul class="activity-list">
-            <li>Early start for this one. Worth it, I promise.</li>
-            <li>Ninh Binh is about 2 hours south of Hanoi by car, so we'll aim to leave around 7:30am and be there by 9:30am. It's called the inland Ha Long Bay and that's exactly what it looks like. Same dramatic limestone karsts, but surrounded by rice paddies and rivers instead of sea. It's stunning in a completely different way.</li>
-            <li>At Trang An, local rowers take us through caves, past ancient temples and under limestone cliffs. The boat trip itself is about 2.5 hours. You just sit there and take it in.</li>
-            <li>Lunch in town. Local speciality is goat meat. Don't knock it until you've tried it.</li>
-            <li>The 2-hour drive back means we'll be in Hanoi by early evening for a quiet night.</li>
-          </ul>
-          <div class="act-chips">
-            <button class="act-chip" onclick="openActivity('ninh-binh');event.stopPropagation()">🛶 Ninh Binh & Trang An <span class="act-chip-arrow">↗</span></button>
-          </div>
-        </div></div>
-      </div>
-
-      <div class="day-card" data-reveal onclick="toggleDay(this)">
-        <div class="day-header">
-          <div class="day-num">21 Jun</div>
-          <div class="day-info">
-            <div class="day-title">Chill Day & Street Food Tour</div>
-            <div class="day-date">Sunday 21 June</div>
-            <div class="day-tags"><span class="tag tag-food">Food</span><span class="tag tag-relax">Relaxed</span></div>
-          </div>
-          <div class="day-chevron">▼</div>
-        </div>
-        <div class="day-body"><div class="day-content">
-          <ul class="activity-list">
-            <li>Morning coffee by Hoan Kiem Lake. It's about 10 minutes on foot from the Old Quarter hotels. Locals do tai chi here and it's a lovely atmosphere. Just sit and watch the city wake up.</li>
-            <li>Afternoon is free. Mum, I'd strongly recommend a spa. Vietnamese massage is exceptional and it's very affordable. Jason can find his own trouble 😄</li>
-            <li>Evening street food tour of the Old Quarter. About 3 hours. Banh Mi, egg coffee, spring rolls, and a Vietnamese sweet dessert called Che. Go in with an open mind on that last one.</li>
-          </ul>
-          <div class="tip-note">Egg coffee at Cafe Giang on Hang Gai Street. Whipped egg yolk over espresso. Tastes like liquid tiramisu. Do not skip it.</div>
-          <div class="act-chips">
-            <button class="act-chip" onclick="openActivity('street-food');event.stopPropagation()">🍜 Street Food Tour <span class="act-chip-arrow">↗</span></button>
-          </div>
-        </div></div>
-      </div>
-
-      <div class="day-card" data-reveal onclick="toggleDay(this)">
-        <div class="day-header">
-          <div class="day-num">22 Jun</div>
-          <div class="day-info">
-            <div class="day-title">Flex Day</div>
-            <div class="day-date">Monday 22 June</div>
-            <div class="day-tags"><span class="tag tag-food">Food</span><span class="tag tag-shopping">Shopping</span><span class="tag tag-relax">Free</span></div>
-          </div>
-          <div class="day-chevron">▼</div>
-        </div>
-        <div class="day-body"><div class="day-content">
-          <ul class="activity-list">
-            <li>I've left the last full day open on purpose. By this point we'll know what we feel like.</li>
-            <li>My vote is a cooking class. Learn to make Pho, Banh Mi and spring rolls and actually go home able to cook the food we've been eating all trip.</li>
-            <li>Other options: the Ho Chi Minh Mausoleum if anyone's curious (about 20 minutes by Grab from the Old Quarter), last minute shopping in the Old Quarter, or a spa day. All equally valid.</li>
-          </ul>
-          <div class="act-chips">
-            <button class="act-chip" onclick="openActivity('cooking');event.stopPropagation()">👨‍🍳 Cooking Class <span class="act-chip-arrow">↗</span></button>
-          </div>
-        </div></div>
-      </div>
-
-      <div class="day-card" data-reveal onclick="toggleDay(this)">
-        <div class="day-header">
-          <div class="day-num">23 Jun</div>
-          <div class="day-info">
-            <div class="day-title">Departure Day</div>
-            <div class="day-date">Tuesday 23 June</div>
-            <div class="day-tags"><span class="tag tag-travel">Travel</span></div>
-          </div>
-          <div class="day-chevron">▼</div>
-        </div>
-        <div class="day-body"><div class="day-content">
-          <ul class="activity-list">
-            <li>Last morning. One final walk around Hoan Kiem Lake if anyone's up for it. It's a 10-minute stroll from the hotel.</li>
-            <li>Checkout at 7:30am. Noi Bai Airport is about 45 minutes from the Old Quarter, which is why we're leaving that early. Flight home at 9:55am. Check in closes 90 minutes before, so there's no room for a lie-in on this one.</li>
-            <li>Back in Melbourne by 10:15pm. Then immediately start planning when we can go back.</li>
-          </ul>
-          <div class="tip-note">Noi Bai Airport is 45 minutes away. The 7:30am checkout is not negotiable.</div>
-        </div></div>
-      </div>
-
-    </div>
-  </div>
-</section>
-
-<!-- MAPS -->
-<section id="maps">
-  <p class="section-eyebrow" data-reveal>South to North</p>
-  <h2 class="section-title" data-reveal>The Route</h2>
-  <p class="section-intro" data-reveal>Three weeks from the Mekong Delta to Ha Long Bay. We fly into Ho Chi Minh City, spend four days in the south, then fly north to Hanoi for the second leg.</p>
-  <div class="section-divider" data-reveal></div>
-
-  <div class="map-features">
-
-    <!-- HCMC -->
-    <div class="map-feature" data-reveal>
-      <div class="map-feature-header">
-        <div class="city-icon saigon">🏙️</div>
-        <div>
-          <div class="map-feature-city">Ho Chi Minh City</div>
-          <div class="map-feature-dates">11-15 June · District 3 base</div>
-        </div>
-      </div>
-      <div class="map-pins">
-        <div class="map-pin">
-          <span class="map-pin-icon">🏨</span>
-          <div>
-            <span class="map-pin-label">Lotus Saigon Hotel</span>
-            <span class="map-pin-sub">Our base · District 3</span>
-          </div>
-        </div>
-        <div class="map-pin">
-          <span class="map-pin-icon">🏛</span>
-          <div>
-            <span class="map-pin-label">War Remnants Museum</span>
-            <span class="map-pin-sub">12 Jun · Opens 7:30 AM</span>
-          </div>
-        </div>
-        <div class="map-pin">
-          <span class="map-pin-icon">🛍</span>
-          <div>
-            <span class="map-pin-label">Ben Thanh Market</span>
-            <span class="map-pin-sub">12 Jun · Afternoon</span>
-          </div>
-        </div>
-        <div class="map-pin">
-          <span class="map-pin-icon">🕳</span>
-          <div>
-            <span class="map-pin-label">Cu Chi Tunnels</span>
-            <span class="map-pin-sub">13 Jun · ~1.5 hrs northwest</span>
-          </div>
-        </div>
-        <div class="map-pin">
-          <span class="map-pin-icon">🚤</span>
-          <div>
-            <span class="map-pin-label">Mekong Delta</span>
-            <span class="map-pin-sub">14 Jun · ~1.5 hrs south by coach</span>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- HANOI -->
-    <div class="map-feature" data-reveal>
-      <div class="map-feature-header">
-        <div class="city-icon hanoi">🏯</div>
-        <div>
-          <div class="map-feature-city">Hanoi</div>
-          <div class="map-feature-dates">15-23 June · Old Quarter base</div>
-        </div>
-      </div>
-      <div class="map-pins">
-        <div class="map-pin">
-          <span class="map-pin-icon">🌊</span>
-          <div>
-            <span class="map-pin-label">Hoan Kiem Lake</span>
-            <span class="map-pin-sub">16 Jun · ~10 min walk from hotel</span>
-          </div>
-        </div>
-        <div class="map-pin">
-          <span class="map-pin-icon">🏛</span>
-          <div>
-            <span class="map-pin-label">Hoa Lo Prison</span>
-            <span class="map-pin-sub">16 Jun · ~10 min walk from hotel</span>
-          </div>
-        </div>
-        <div class="map-pin">
-          <span class="map-pin-icon">🌿</span>
-          <div>
-            <span class="map-pin-label">Ninh Binh</span>
-            <span class="map-pin-sub">20 Jun · ~2 hrs south by car</span>
-          </div>
-        </div>
-        <div class="map-pin">
-          <span class="map-pin-icon">🚢</span>
-          <div>
-            <span class="map-pin-label">Ha Long Bay</span>
-            <span class="map-pin-sub">17-18 Jun · ~3.5 hrs east by coach</span>
-          </div>
-        </div>
-        <div class="map-pin">
-          <span class="map-pin-icon">📚</span>
-          <div>
-            <span class="map-pin-label">Temple of Literature</span>
-            <span class="map-pin-sub">20 Jun · ~15 min Grab away</span>
-          </div>
-        </div>
-      </div>
-    </div>
-
-  </div>
-</section>
-
-<!-- HOTELS -->
-<section id="hotels">
-  <p class="section-eyebrow" data-reveal>Where We're Sleeping</p>
-  <h2 class="section-title" data-reveal>Accommodation</h2>
-  <p class="section-intro" data-reveal>HCMC is sorted and I'm happy with the choice. Hanoi is still to book. I'll update this page once it's confirmed.</p>
-  <div class="section-divider" data-reveal></div>
-  <div class="section-photo-single" data-reveal>
-    <img src="img/hotel-banner.jpg" alt="Accommodation" />
-  </div>
-  <div class="hotels-grid">
-
-    <div class="hotel-card" data-reveal delay-1>
-      <div class="hotel-body">
-        <span class="hotel-status status-booked">✓ Booked</span>
-        <div class="hotel-city">Ho Chi Minh City</div>
-        <div class="hotel-name">Lotus Saigon Hotel</div>
-        <div class="hotel-address">120 Cách Mạng Tháng Tám, District 3</div>
-        <div class="hotel-dates">📅 11 June → 15 June · 4 nights</div>
-        <div class="hotel-features">
-          <span class="hotel-feat">🏊 Rooftop Pool, Level 19</span>
-          <span class="hotel-feat">🍳 Breakfast included</span>
-          <span class="hotel-feat">🛗 Lift</span>
-          <span class="hotel-feat">District 3</span>
-        </div>
-        <div class="hotel-note">The rooftop pool on the 19th floor with city views is going to be perfect for unwinding after hot days out. Breakfast included means mornings are easy. No faff, just eat and go. About 45 minutes by Grab from Tan Son Nhat Airport (SGN).</div>
-      </div>
-    </div>
-
-    <div class="hotel-card" data-reveal delay-2>
-      <div class="hotel-body">
-        <span class="hotel-status status-booked">✓ Booked</span>
-        <div class="hotel-city">Hanoi · Stay 1</div>
-        <div class="hotel-name">Hanoi Esplendor Hotel and Spa</div>
-        <div class="hotel-address">Hoan Kiem District, Hanoi</div>
-        <div class="hotel-dates">📅 15 June → 18 June · 3 nights</div>
-        <div class="hotel-features">
-          <span class="hotel-feat">🍳 Breakfast included</span>
-          <span class="hotel-feat">🧖 Spa</span>
-          <span class="hotel-feat">Old Quarter area</span>
-        </div>
-        <div class="hotel-note">Right in the heart of the Old Quarter. About 45 minutes by pre-booked transfer from Noi Bai Airport (HAN) when we arrive late on the 15th. Checking out on the 18th to board the Mon Cheri cruise.</div>
-      </div>
-    </div>
-
-    <div class="hotel-card" data-reveal delay-3>
-      <div class="hotel-body">
-        <span class="hotel-status status-booked">✓ Booked</span>
-        <div class="hotel-city">Ha Long Bay</div>
-        <div class="hotel-name">Mon Cheri Cruise</div>
-        <div class="hotel-address">Ha Long Bay, Quang Ninh Province</div>
-        <div class="hotel-dates">📅 18 June → 19 June · 1 night</div>
-        <div class="hotel-features">
-          <span class="hotel-feat">🚢 Overnight cruise</span>
-          <span class="hotel-feat">🍽 All meals included</span>
-          <span class="hotel-feat">Ha Long Bay</span>
-        </div>
-        <div class="hotel-note">One night on the water. Dinner, breakfast and all meals on board. Ha Long City is about 3.5 hours by coach from Hanoi: the cruise includes return transfers.</div>
-      </div>
-    </div>
-
-    <div class="hotel-card" data-reveal delay-4>
-      <div class="hotel-body">
-        <span class="hotel-status status-needed">⚠ To Book</span>
-        <div class="hotel-city">Hanoi · Stay 2</div>
-        <div class="hotel-name">Old Quarter Hotel (TBC)</div>
-        <div class="hotel-address">Old Quarter, Hoan Kiem District, Hanoi</div>
-        <div class="hotel-dates">📅 19 June → 23 June · 4 nights</div>
-        <div class="hotel-features">
-          <span class="hotel-feat">🍳 Breakfast included</span>
-          <span class="hotel-feat">Old Quarter location</span>
-        </div>
-        <div class="hotel-note">Back from the cruise on the 19th. Old Quarter location keeps everything walkable for the final four nights. About 45 minutes to Noi Bai Airport on departure day. Will update once confirmed.</div>
-      </div>
-    </div>
-
-  </div>
-</section>
-
-<section id="phrases">
-  <p class="section-eyebrow" data-reveal>Speak Like a Local</p>
-  <h2 class="section-title" data-reveal>Vietnamese Phrases</h2>
-  <p class="section-intro" data-reveal>You don't need much — but knowing a few words goes a long way. Locals genuinely appreciate the effort, even if your pronunciation is a disaster.</p>
-  <div class="section-divider" data-reveal></div>
-  <div class="phrases-grid">
-    <div class="phrase-card" data-reveal>
-      <div class="phrase-viet">Xin chào</div>
-      <div class="phrase-phon">sin chow</div>
-      <div class="phrase-eng">Hello</div>
-    </div>
-    <div class="phrase-card" data-reveal>
-      <div class="phrase-viet">Cảm ơn</div>
-      <div class="phrase-phon">gahm un</div>
-      <div class="phrase-eng">Thank you</div>
-    </div>
-    <div class="phrase-card" data-reveal>
-      <div class="phrase-viet">Xin lỗi</div>
-      <div class="phrase-phon">sin loy</div>
-      <div class="phrase-eng">Sorry / Excuse me</div>
-    </div>
-    <div class="phrase-card" data-reveal>
-      <div class="phrase-viet">Bao nhiêu?</div>
-      <div class="phrase-phon">bow nyew</div>
-      <div class="phrase-eng">How much?</div>
-    </div>
-    <div class="phrase-card" data-reveal>
-      <div class="phrase-viet">Đắt quá</div>
-      <div class="phrase-phon">daht kwah</div>
-      <div class="phrase-eng">Too expensive</div>
-      <div class="phrase-note">Use this freely at markets</div>
-    </div>
-    <div class="phrase-card" data-reveal>
-      <div class="phrase-viet">Ngon lắm!</div>
-      <div class="phrase-phon">ngon lahm</div>
-      <div class="phrase-eng">Delicious!</div>
-      <div class="phrase-note">Say this after every meal</div>
-    </div>
-    <div class="phrase-card" data-reveal>
-      <div class="phrase-viet">Không, cảm ơn</div>
-      <div class="phrase-phon">khome, gahm un</div>
-      <div class="phrase-eng">No thank you</div>
-    </div>
-    <div class="phrase-card" data-reveal>
-      <div class="phrase-viet">Tính tiền</div>
-      <div class="phrase-phon">ting tyen</div>
-      <div class="phrase-eng">Bill please</div>
-    </div>
-    <div class="phrase-card" data-reveal>
-      <div class="phrase-viet">Nước</div>
-      <div class="phrase-phon">nuoc</div>
-      <div class="phrase-eng">Water</div>
-    </div>
-    <div class="phrase-card" data-reveal>
-      <div class="phrase-viet">...ở đâu?</div>
-      <div class="phrase-phon">uh doh</div>
-      <div class="phrase-eng">Where is...?</div>
-    </div>
-    <div class="phrase-card" data-reveal>
-      <div class="phrase-viet">Một hai ba, dô!</div>
-      <div class="phrase-phon">mot hi ba, yo!</div>
-      <div class="phrase-eng">Cheers!</div>
-      <div class="phrase-note">The most important one</div>
-    </div>
-    <div class="phrase-card" data-reveal>
-      <div class="phrase-viet">Tôi không hiểu</div>
-      <div class="phrase-phon">toy khome hyew</div>
-      <div class="phrase-eng">I don't understand</div>
-    </div>
-  </div>
-</section>
-
-<footer>
-  <p>🇻🇳 The Doos Vietnam Trip · June 2026</p>
-  <p style="margin-top:0.4rem;">Christine · Ashraf · Jason · Chris ✈</p>
-  <p style="margin-top:0.5rem;font-style:italic;">Plans get updated as things are confirmed. Check back here for the latest!</p>
-</footer>
-
-<script>
-  // Always start at top on load/refresh
-  if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
-  window.scrollTo(0, 0);
-
-  // LIVE CLOCKS
-  (function() {
-    const melEl = document.getElementById('clock-mel');
-    const sgnEl = document.getElementById('clock-sgn');
-    const fmt = tz => new Date().toLocaleTimeString('en-AU', { timeZone: tz, hour: '2-digit', minute: '2-digit', hour12: false });
-    function tick() {
-      if (melEl) melEl.textContent = fmt('Australia/Melbourne');
-      if (sgnEl) sgnEl.textContent = fmt('Asia/Ho_Chi_Minh');
-    }
-    tick();
-    setInterval(tick, 1000);
-  })();
-
-  // SCROLL REVEAL — photos slide in as you scroll
-  (function () {
-    const targets = document.querySelectorAll(
-      '.section-photo-row img, .section-photo-single img, .hotel-img'
-    );
-    targets.forEach((el) => {
-      el.classList.add('reveal');
-      const siblings = el.parentElement.querySelectorAll('.reveal');
-      const idx = Array.from(siblings).indexOf(el);
-      el.style.transitionDelay = (idx * 0.25) + 's';
-    });
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(e => {
-        if (e.isIntersecting) {
-          e.target.classList.add('visible');
-          observer.unobserve(e.target);
-        }
-      });
-    }, { threshold: 0.12 });
-    targets.forEach(el => observer.observe(el));
-  })();
-
-  // ACCORDION
-  function toggleDay(card) { card.classList.toggle('open'); }
-
-  // COUNTDOWN: departure is 11 June 2026 10:35 AM AEST (UTC+10)
-  function updateCountdown() {
-    const departure = new Date('2026-06-11T00:35:00Z');
-    const now = new Date();
-    const diff = departure - now;
-    if (diff <= 0) {
-      document.getElementById('countdown-boxes').innerHTML = '<span class="countdown-gone">We\'re on our way! 🇻🇳</span>';
-      return;
-    }
-    const days  = Math.floor(diff / (1000*60*60*24));
-    const hours = Math.floor((diff % (1000*60*60*24)) / (1000*60*60));
-    const mins  = Math.floor((diff % (1000*60*60)) / (1000*60));
-    const secs  = Math.floor((diff % (1000*60)) / 1000);
-    document.getElementById('cd-days').textContent  = days;
-    document.getElementById('cd-hours').textContent = String(hours).padStart(2,'0');
-    document.getElementById('cd-mins').textContent  = String(mins).padStart(2,'0');
-    document.getElementById('cd-secs').textContent  = String(secs).padStart(2,'0');
-  }
-  updateCountdown();
-  setInterval(updateCountdown, 1000);
-
-  // SCROLL PROGRESS BAR
-  const progressBar = document.getElementById('scroll-progress');
-  function updateProgress() {
-    const scrolled = window.scrollY;
-    const total = document.documentElement.scrollHeight - window.innerHeight;
-    progressBar.style.width = (scrolled / total * 100) + '%';
-  }
-  window.addEventListener('scroll', updateProgress, { passive: true });
-
-  // HERO MAP PIN POSITIONING
-  (function () {
-    const panel = document.getElementById('hero-right');
-    if (!panel) return;
-    const IMG_W = 800, IMG_H = 1350;
-    // Coords: original 2800px values → minus 1200 (first crop) → minus 100,20 (tight crop)
-    const CITIES = {
-      hcmc:     { x: 470, y: 1096 },
-      mekong:   { x: 382, y: 1156 },
-      cuchi:    { x: 453, y: 1060 },
-      ninhbinh: { x: 413, y:  313 },
-      hanoi:    { x: 403, y:  247 },
-      halong:   { x: 507, y:  259 },
-    };
-    function position() {
-      const pW = panel.offsetWidth, pH = panel.offsetHeight;
-      // background-size: contain; background-position: center
-      const scale = Math.min(pW / IMG_W, pH / IMG_H);
-      const ox = (pW - IMG_W * scale) * 0.5;
-      const oy = (pH - IMG_H * scale) * 0.5;
-      panel.querySelectorAll('.hero-pin').forEach(pin => {
-        const c = CITIES[pin.dataset.hcity];
-        if (!c) return;
-        pin.style.left = (ox + c.x * scale) + 'px';
-        pin.style.top  = (oy + c.y * scale) + 'px';
-      });
-    }
-    position();
-    window.addEventListener('resize', position, { passive: true });
-  })();
-
-  // NAV SHRINK ON SCROLL
-  const nav = document.getElementById('main-nav');
-  function updateNav() {
-    nav.classList.toggle('scrolled', window.scrollY > 60);
-  }
-  window.addEventListener('scroll', updateNav, { passive: true });
-
-  // SCROLL REVEAL
-  const revealObserver = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('is-visible');
-        revealObserver.unobserve(entry.target);
-      }
-    });
-  }, { threshold: 0.08, rootMargin: '0px 0px -50px 0px' });
-
-  document.querySelectorAll('[data-reveal]').forEach(el => revealObserver.observe(el));
-
-  // Fix: delay classes need to be on the element, not as separate attributes
-  // Re-map delay-N attributes → delay-N classes
-  document.querySelectorAll('[delay-1]').forEach(el => el.classList.add('delay-1'));
-  document.querySelectorAll('[delay-2]').forEach(el => el.classList.add('delay-2'));
-  document.querySelectorAll('[delay-3]').forEach(el => el.classList.add('delay-3'));
-  document.querySelectorAll('[delay-4]').forEach(el => el.classList.add('delay-4'));
-
-  // SCROLL TO TOP
-  const scrollTopBtn = document.getElementById('scroll-top');
-  window.addEventListener('scroll', () => {
-    scrollTopBtn.classList.toggle('visible', window.scrollY > 400);
-  }, { passive: true });
-  scrollTopBtn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
-
-  // DRAG-TO-SCROLL image band
-  (function() {
-    const band = document.querySelector('.img-band');
-    if (!band) return;
-    let isDown = false, startX, scrollLeft;
-    band.addEventListener('mousedown', e => {
-      isDown = true;
-      band.classList.add('is-dragging');
-      startX = e.pageX - band.offsetLeft;
-      scrollLeft = band.scrollLeft;
-      e.preventDefault();
-    });
-    document.addEventListener('mouseup', () => { isDown = false; band.classList.remove('is-dragging'); });
-    band.addEventListener('mousemove', e => {
-      if (!isDown) return;
-      const x = e.pageX - band.offsetLeft;
-      const walk = (x - startX) * 1.6;
-      band.scrollLeft = scrollLeft - walk;
-    });
-  })();
-
-  // NUMBER COUNTERS — animate stat-num values on scroll into view
-  (function() {
-    const nums = document.querySelectorAll('.stat-num');
-    if (!nums.length) return;
-    const obs = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (!entry.isIntersecting) return;
-        const el = entry.target;
-        const target = parseInt(el.textContent, 10);
-        if (isNaN(target)) return; // skip "11 Jun", "23 Jun"
-        const duration = 1100;
-        const startTime = performance.now();
-        function tick(now) {
-          const t = Math.min((now - startTime) / duration, 1);
-          const eased = 1 - Math.pow(1 - t, 3);
-          el.textContent = Math.round(eased * target);
-          if (t < 1) requestAnimationFrame(tick);
-          else el.textContent = target;
-        }
-        requestAnimationFrame(tick);
-        obs.unobserve(el);
-      });
-    }, { threshold: 0.7 });
-    nums.forEach(el => obs.observe(el));
-  })();
-
-  // 3D CARD TILT — desktop pointer devices only
-  (function() {
-    if (!window.matchMedia('(hover: hover)').matches) return;
-    document.querySelectorAll('.flight-card, .hotel-card').forEach(card => {
-      card.addEventListener('mousemove', e => {
-        const r = card.getBoundingClientRect();
-        const x = e.clientX - r.left, y = e.clientY - r.top;
-        const cx = r.width / 2, cy = r.height / 2;
-        const rY = ((x - cx) / cx) * 6;
-        const rX = -((y - cy) / cy) * 4;
-        card.style.transform = `perspective(900px) rotateX(${rX}deg) rotateY(${rY}deg) translateY(-5px)`;
-        card.style.boxShadow = `${-rY * 2}px ${rX * 2}px 40px rgba(0,0,0,0.35), 0 12px 40px rgba(0,0,0,0.25)`;
-      });
-      card.addEventListener('mouseleave', () => {
-        card.style.transform = '';
-        card.style.boxShadow = '';
-      });
-    });
-  })();
-
-  // PARALLAX on section photo rows
-  (function() {
-    const pImgs = Array.from(document.querySelectorAll('.section-photo-row img, .section-photo-single img'));
-    if (!pImgs.length) return;
-    const mo = window.matchMedia('(prefers-reduced-motion: reduce)');
-    function updateParallax() {
-      if (mo.matches) return;
-      const vh = window.innerHeight;
-      pImgs.forEach(img => {
-        const wrap = img.closest('.section-photo-row, .section-photo-single');
-        if (!wrap) return;
-        const rect = wrap.getBoundingClientRect();
-        // progress: 0 = bottom of viewport, 1 = top of viewport
-        const progress = (vh - rect.top) / (vh + rect.height);
-        const shift = (progress - 0.5) * 38; // ±19px
-        img.style.transform = `scale(1.12) translateY(${shift}px)`;
-      });
-    }
-    window.addEventListener('scroll', updateParallax, { passive: true });
-    updateParallax();
-  })();
-
-</script>
-
-<button id="scroll-top" aria-label="Back to top">↑</button>
-
-<!-- ACTIVITY MODAL -->
-<div id="act-overlay" class="act-overlay" onclick="if(event.target===this)closeActivity()">
-  <div class="act-panel">
-    <button class="act-close" onclick="closeActivity()">✕</button>
-    <img id="act-photo" class="act-panel-photo" src="" alt="" />
-    <div class="act-panel-body">
-      <div class="act-panel-tags" id="act-tags"></div>
-      <h2 class="act-panel-title" id="act-title"></h2>
-      <div class="act-panel-meta" id="act-meta"></div>
-      <div class="act-not-booked" id="act-not-booked"></div>
-      <p class="act-panel-desc" id="act-desc"></p>
-      <div class="act-panel-h">What to Expect</div>
-      <ul id="act-expect"></ul>
-      <div class="act-panel-tip" id="act-tip"></div>
-    </div>
-  </div>
-</div>
-
-<script>
-const ACTS = {
-  'war-museum': {
-    title: 'War Remnants Museum',
-    meta: '12 Jun · Ho Chi Minh City · ~2–3 hrs',
-    photo: 'img/war-museum.jpg',
-    tags: ['History', 'Culture'],
-    notBooked: false,
-    desc: 'One of the most powerful museums in Southeast Asia. Covers Vietnam\'s history through multiple conflicts with raw photography exhibits, outdoor military hardware, and moving personal accounts.',
-    expect: ['Go early — before 10am — to beat the heat and tour groups','Multiple halls covering French colonial era, American War, and its aftermath','Outdoor courtyard with aircraft, tanks and military equipment','Photography allowed throughout — bring a camera','Allow 2–3 hours to do it properly']
-  },
-  'ben-thanh': {
-    title: 'Ben Thanh Market & Night Market',
-    meta: '12 Jun · Ho Chi Minh City · Afternoon & Evening',
-    photo: 'img/ben-thanh.jpg',
-    tags: ['Shopping', 'Food', 'Culture'],
-    notBooked: false,
-    desc: 'Saigon\'s most iconic landmark market — chaotic, colourful, and full of everything. After 6pm the surrounding streets transform into a lively street food night market.',
-    expect: ['Hundreds of stalls: clothing, souvenirs, spices, lacquerware, coffee, silk','About 15 minutes walkable from District 3, or a quick Grab','Night market outside turns the whole area into a street food zone after 6pm','Great for gifts — lacquerware, Vietnamese coffee, silk scarves'],
-    tip: 'Haggling is expected and fun. Start at half the asking price. Walking away often brings the price right down.'
-  },
-  'cu-chi': {
-    title: 'Cu Chi Tunnels',
-    meta: '13 Jun · 1.5 hrs from HCMC · Full Day',
-    photo: 'img/cu-chi.jpg',
-    tags: ['History', 'Outdoors'],
-    notBooked: true,
-    desc: '250km of underground tunnels used by the Viet Cong during the Vietnam War. An extraordinary feat of engineering and human endurance set in dense jungle northwest of Saigon.',
-    expect: ['1.5-hour coach drive from HCMC — depart morning','Live demonstrations of jungle booby-trap mechanisms','Option to crawl through the tunnels — go for the widened tourist version','Outdoor jungle site with shade areas — back at hotel by mid-afternoon'],
-    tip: 'Wear dark, comfortable clothes — the tunnels are tight and warm. Bring plenty of water. The widened tourist tunnels are challenging enough.'
-  },
-  'mekong': {
-    title: 'Mekong Delta Boat Tour',
-    meta: '14 Jun · 1.5 hrs from HCMC · Full Day',
-    photo: 'img/mekong-boat.jpg',
-    tags: ['Nature', 'Food', 'Relaxed'],
-    notBooked: true,
-    desc: 'A full day out on Vietnam\'s great river system. Canals, rice paddies, coconut palms and small fishing villages — a completely different side of Vietnam to the city.',
-    expect: ['Coach south from HCMC, arriving at the delta by mid-morning','Narrow canoe ride through jungle canals — local rowers, you just sit back','Stops at a coconut candy factory, bee farm, and tropical fruit garden','Live traditional music performance; generous lunch included on site'],
-    tip: 'An all-day trip. Pack sun protection, a hat, and bring a camera. The canal canoe section is the standout.'
-  },
-  'hoa-lo': {
-    title: 'Hoa Lo Prison & Old Quarter',
-    meta: '16 Jun · Hanoi · Walking Day',
-    photo: 'img/hanoi-old-quarter.jpg',
-    tags: ['History', 'Walking', 'Culture'],
-    notBooked: false,
-    desc: 'Start at Hoa Lo Prison — the infamous "Hanoi Hilton" — then lose yourself in Hanoi\'s ancient 36 Streets and end at the serene Hoan Kiem Lake with its red bridge and island temple.',
-    expect: ['Hoa Lo is about 10 minutes on foot from most Old Quarter hotels','Audio guide is worth getting — spans two very different historical eras','The 36 Streets each historically sold one specific trade — look for the signs','Hoan Kiem Lake is a short walk from Hoa Lo; the red bridge and island temple are beautiful'],
-    tip: 'Get the audio guide at Hoa Lo. Everything today is walkable — wear comfortable shoes.'
-  },
-  'halong': {
-    title: 'Ha Long Bay Cruise',
-    meta: '17–18 Jun · Overnight · UNESCO World Heritage',
-    photo: 'img/halong-bay.jpg',
-    tags: ['Nature', 'Unmissable', 'Overnight'],
-    notBooked: true,
-    desc: 'Thousands of limestone karsts rising from emerald-green water. One of the most remarkable landscapes on earth. Two days on the bay, sleeping overnight on the boat.',
-    expect: ['3.5-hour coach from Hanoi — board around 11:30am, lunch on deck as you sail out','Afternoon cruising through karsts, cave visit, optional kayaking','Sunset on deck with drinks; fresh seafood dinner on board','Sunrise next morning, breakfast on deck, then return coach to Hanoi'],
-    tip: 'Kayaking is optional — sitting on deck watching the karsts pass works just fine. Bring a light layer for evenings on the water.'
-  },
-  'temple': {
-    title: 'Temple of Literature',
-    meta: '19 Jun · Hanoi · ~2 hrs',
-    photo: 'img/temple-literature.jpg',
-    tags: ['Culture', 'History'],
-    notBooked: false,
-    desc: 'Vietnam\'s first university, founded in 1070. Five beautifully preserved walled courtyards of traditional Vietnamese architecture dedicated to Confucius and the country\'s greatest scholars.',
-    expect: ['15-minute Grab from the Old Quarter','Five courtyards — each with its own distinct character and history','Stone stelae listing doctoral graduates dating back to the 1400s','Peaceful and photogenic — a real contrast to the busy city outside'],
-    tip: 'Hire a guide at the gate. The architecture tells a story that\'s invisible without context — worth every dong.'
-  },
-  'ninh-binh': {
-    title: 'Ninh Binh & Trang An',
-    meta: '20 Jun · 2 hrs from Hanoi · Day Trip',
-    photo: 'img/ninh-binh.jpg',
-    tags: ['Nature', 'History', 'Scenic'],
-    notBooked: true,
-    desc: 'Called the "inland Ha Long Bay" and it earns the name. The same dramatic limestone karsts — but surrounded by rice paddies, rivers and ancient temples instead of sea.',
-    expect: ['2-hour drive south — early 7:30am departure','2.5-hour rowboat through caves and past ancient temples at Trang An','Quiet, slow, and completely beautiful — local rowers do the work','Lunch in town; the local speciality is goat — try it'],
-    tip: 'The early start is non-negotiable. The boat section at Trang An is the best part of the day — completely peaceful.'
-  },
-  'street-food': {
-    title: 'Hanoi Street Food Tour',
-    meta: '21 Jun · Old Quarter · Evening (~3 hrs)',
-    photo: 'img/street-food.jpg',
-    tags: ['Food', 'Culture', 'Evening'],
-    notBooked: true,
-    desc: 'A guided 3-hour evening walk through the Old Quarter\'s best food stalls. Banh Mi, egg coffee, fresh spring rolls, Bun Cha, and Che — a Vietnamese sweet dessert worth keeping an open mind about.',
-    expect: ['Small-group walking tour through the best stalls in the Old Quarter','Multiple stops — Banh Mi, spring rolls, Bun Cha, egg coffee, Che dessert','Local guides who know exactly which stalls are the authentic ones','Runs in the evening when the Old Quarter really comes alive'],
-    tip: 'Go in hungry. The egg coffee at Cafe Giang is the standout stop — whipped egg yolk over espresso. Tastes like liquid tiramisu.'
-  },
-  'cooking': {
-    title: 'Vietnamese Cooking Class',
-    meta: '22 Jun · Old Quarter · ~4 hrs',
-    photo: 'img/cooking-class.jpg',
-    tags: ['Food', 'Fun', 'Culture'],
-    notBooked: true,
-    desc: 'Learn to make Pho, Banh Mi and fresh spring rolls with a local chef. Go home actually able to cook the food you\'ve been eating all trip — the best possible souvenir.',
-    expect: ['Usually starts with a guided market visit to source fresh ingredients','Hands-on cooking session with a local chef in a proper kitchen','Make Pho broth from scratch, fresh spring rolls, and Banh Mi','Sit down and eat everything you\'ve made at the end — always the best bit'],
-    tip: 'Not booked yet — look for small-group classes in the Old Quarter for a better experience than the big tourist ones. Usually 6–8 people max.'
-  }
-};
-
-function openActivity(id) {
-  const a = ACTS[id]; if (!a) return;
-  document.getElementById('act-photo').src = a.photo;
-  document.getElementById('act-photo').alt = a.title;
-  document.getElementById('act-title').textContent = a.title;
-  document.getElementById('act-meta').textContent = a.meta;
-  document.getElementById('act-tags').innerHTML = a.tags.map(t => `<span class="act-panel-tag">${t}</span>`).join('');
-  document.getElementById('act-desc').textContent = a.desc;
-  document.getElementById('act-expect').innerHTML = a.expect.map(e => `<li>${e}</li>`).join('');
-  const nb = document.getElementById('act-not-booked');
-  nb.textContent = a.notBooked ? '⚠ Not yet booked — ideas only' : '';
-  nb.style.display = a.notBooked ? 'block' : 'none';
-  const tip = document.getElementById('act-tip');
-  if (a.tip) { tip.textContent = a.tip; tip.style.display = 'block'; }
-  else tip.style.display = 'none';
-  document.getElementById('act-overlay').classList.add('open');
-  document.body.style.overflow = 'hidden';
-}
-function closeActivity() {
-  document.getElementById('act-overlay').classList.remove('open');
-  document.body.style.overflow = '';
-}
-document.addEventListener('keydown', e => { if (e.key === 'Escape') closeActivity(); });
-</script>
+  <div id="app"></div>
+
+  <script src="https://unpkg.com/react@18.3.1/umd/react.production.min.js" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.production.min.js" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+
+  <script src="trip-data.js"></script>
+  <script src="image-slot.js"></script>
+  <script type="text/babel" src="trip-icons.jsx"></script>
+  <script type="text/babel" src="trip-app.jsx"></script>
 </body>
 </html>
