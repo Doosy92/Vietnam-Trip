@@ -135,47 +135,42 @@ function Dashboard() {
   const [city, setCity] = useState(cities[0]);
   const w = D.weather[city];
 
-  const [aud, setAud] = useState("100");
-  const [flipped, setFlipped] = useState(false); // false: AUD→VND, true: VND→AUD
   const RATE = 16450; // 1 AUD ≈ 16,450 VND (snapshot)
-  const audNum = parseFloat(aud) || 0;
-  const vnd = Math.round(audNum * RATE);
-  const fmtVnd = vnd.toLocaleString("en-US");
+  const [aud, setAud] = useState("100");
+  const [vndStr, setVndStr] = useState(String(Math.round(100 * RATE)));
+  const [flipped, setFlipped] = useState(false);
 
-  const quick = flipped ? [50000, 250000, 1000000, 5000000] : [10, 50, 100, 500];
+  const onAudChange = (e) => {
+    setAud(e.target.value);
+    const v = parseFloat(e.target.value) || 0;
+    setVndStr(String(Math.round(v * RATE)));
+  };
+  const onVndChange = (e) => {
+    setVndStr(e.target.value);
+    const v = parseFloat(e.target.value) || 0;
+    setAud((v / RATE).toFixed(2));
+  };
 
-  // Helper to render a "side" of the calculator — input (live) or output (computed)
-  const inputSide = (
+  const audSide = (
     <label className="fx-side">
-      <span className="fx-label">You spend</span>
+      <span className="fx-label">Australian Dollars</span>
       <span className="fx-input">
-        <input
-          type="number"
-          inputMode="decimal"
-          value={flipped ? String(vnd) : aud}
-          onChange={(e) => {
-            if (flipped) {
-              const v = parseFloat(e.target.value) || 0;
-              setAud(String((v / RATE).toFixed(2)));
-            } else {
-              setAud(e.target.value);
-            }
-          }}
-          aria-label={flipped ? "VND amount" : "AUD amount"}
-        />
-        <span className="fx-currency">{flipped ? "₫" : "A$"}</span>
+        <input type="number" inputMode="decimal" value={aud} onChange={onAudChange} aria-label="AUD amount" />
+        <span className="fx-currency">A$</span>
+      </span>
+    </label>
+  );
+  const vndSide = (
+    <label className="fx-side" style={{ alignItems: "flex-end", textAlign: "right" }}>
+      <span className="fx-label">Vietnamese Dong</span>
+      <span className="fx-input" style={{ justifyContent: "flex-end" }}>
+        <input type="number" inputMode="numeric" value={vndStr} onChange={onVndChange} aria-label="VND amount" style={{ textAlign: "right" }} />
+        <span className="fx-currency">₫</span>
       </span>
     </label>
   );
 
-  const outputSide = (
-    <div className="fx-side" style={{ alignItems: "flex-end", textAlign: "right" }}>
-      <span className="fx-label">You'll see</span>
-      <span className="fx-input fx-out" style={{ justifyContent: "flex-end" }}>
-        {flipped ? audNum.toFixed(2) : fmtVnd} <span className="fx-currency">{flipped ? "A$" : "₫"}</span>
-      </span>
-    </div>
-  );
+  const quick = flipped ? [50000, 250000, 1000000, 5000000] : [10, 50, 100, 500];
 
   return (
     <div className="dashboard reveal">
@@ -206,32 +201,31 @@ function Dashboard() {
 
         <div className="dash-fx">
           <div className="dash-head">
-            <span className="label">{flipped ? "VND → AUD" : "AUD → VND"}</span>
+            <span className="label">AUD ⇄ VND</span>
             <span className="label" style={{ color: "var(--fg-muted)" }}>1 A$ ≈ {RATE.toLocaleString()} ₫</span>
           </div>
           <div className="fx-row">
-            {flipped ? outputSide : inputSide}
+            {flipped ? vndSide : audSide}
             <div className="fx-swap-wrap">
               <button
                 className="fx-swap"
                 onClick={() => setFlipped(f => !f)}
-                aria-label="Flip conversion direction"
-                title="Flip conversion direction"
+                aria-label="Swap sides"
+                title="Swap sides"
               >
                 <Icon.Swap s={16} />
               </button>
-              <span className="fx-swap-hint">Flip</span>
+              <span className="fx-swap-hint">Swap</span>
             </div>
-            {flipped ? inputSide : outputSide}
+            {flipped ? audSide : vndSide}
           </div>
           <div className="fx-quick">
             {quick.map((q) => (
               <button
                 key={q}
-                className={(flipped ? String(vnd) : aud) === String(q) ? "on" : ""}
                 onClick={() => {
-                  if (flipped) setAud(String((q / RATE).toFixed(2)));
-                  else setAud(String(q));
+                  if (flipped) { setVndStr(String(q)); setAud((q / RATE).toFixed(2)); }
+                  else { setAud(String(q)); setVndStr(String(Math.round(q * RATE))); }
                 }}
               >
                 {flipped ? `${(q/1000).toFixed(0)}k₫` : `A$${q}`}
